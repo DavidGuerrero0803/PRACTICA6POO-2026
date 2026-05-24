@@ -110,8 +110,8 @@ public class Betweenle {
         if (this.diccionario == null || !this.diccionario.getIdioma().equals(idioma)) {
             this.diccionario = new Diccionario(idioma);
             String rutaArchivo = idioma.equals("español") ?
-                    "src/main/java/uabc/david/practica5poo2026/espanol.txt" :
-                    "src/main/java/uabc/david/practica5poo2026/ingles.txt";
+                    "src/main/java/uabc/david/practica6poo2026/espanol.txt" :
+                    "src/main/java/uabc/david/practica6poo2026/ingles.txt";
             this.diccionario.cargarArchivo(rutaArchivo);
         }
 
