@@ -7988,6 +7988,7 @@ speaker
 speakers
 speaking
 speaks
+spear
 spears
 spec
 special
@@ -8672,6 +8673,7 @@ tire
 tired
 tires
 tissue
+titan
 titanium
 titans
 title
@@ -9435,6 +9437,7 @@ wm
 wma
 wn
 wolf
+wolfs
 woman
 women
 womens

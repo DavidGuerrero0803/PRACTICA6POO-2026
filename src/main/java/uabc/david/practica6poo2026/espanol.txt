@@ -5939,6 +5939,7 @@ montones
 montón
 monumento
 moral
+moras
 morder
 mordida
 mordido

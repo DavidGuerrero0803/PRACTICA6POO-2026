@@ -348,17 +348,21 @@ public class BetweenleGUI extends Application {
         }
 
         for (int i = 0; i < casillasEntrada.length; i++) {
-            if (i == letraIngresada && casillasEntrada[i].getText().equals("•")) {
-                casillasEntrada[i].setText("•");
-                 casillasEntrada[i].setStyle("-fx-border-color: #5c5c5c; -fx-border-width: 2; -fx-background-color: #f57242; " +
-                         "-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; -fx-min-width: 40px; " +
-                         "-fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+            if (i == letraIngresada) {
+                casillasEntrada[i].setStyle("-fx-border-color: #595858; -fx-border-width: 2; -fx-background-color: white; " +
+                        "-fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; -fx-min-width: 40px; -fx-min-height: " +
+                        "40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
             }
             else if (casillasEntrada[i].getText().isEmpty()) {
-                casillasEntrada[i].setText("");
-                casillasEntrada[i].setStyle("-fx-border-color: #5c5c5c; -fx-border-width: 2; -fx-background-color: white; " +
-                        "-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; -fx-min-width: 40px; " +
-                        "-fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+                casillasEntrada[i].setStyle("-fx-border-color: #CCCCCC; -fx-border-width: 2; -fx-background-color: white; " +
+                        "-fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; -fx-min-width: 40px; -fx-min-height: " +
+                        "40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+            }
+            else {
+                casillasEntrada[i].setTextFill(Color.WHITE);
+                casillasEntrada[i].setStyle("-fx-border-color: #FF9800; -fx-border-width: 2; -fx-background-color: #FF9800; " +
+                        "-fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px; " +
+                        "-fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
             }
         }
     }
@@ -380,7 +384,8 @@ public class BetweenleGUI extends Application {
                 limpiarCasillas();
                 break;
             case "fuera de rango":
-                mostrarAlerta(" ", "La palabra " + intento.toUpperCase() + " está fuera de los límites actuales.", Alert.AlertType.WARNING);
+                mostrarAlerta(" ", "La palabra " + intento.toUpperCase() + " está fuera de los límites actuales.",
+                        Alert.AlertType.WARNING);
                 limpiarCasillas();
                 break;
             case "antes":
@@ -391,6 +396,12 @@ public class BetweenleGUI extends Application {
             case "correcto":
                 actualizarInterfaz();
                 juegoBloqueado = true;
+                for (Label casilla : casillasEntrada) {
+                    casilla.setTextFill(Color.WHITE);
+                    casilla.setStyle("-fx-border-color: #4CAF50; -fx-border-width: 2; -fx-background-color: #4CAF50; " +
+                            "-fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; " +
+                            "-fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+                }
                 mostrarFinJuego(true);
                 break;
             case "sin intentos":
@@ -493,6 +504,11 @@ public class BetweenleGUI extends Application {
             return;
         }
 
+        if (juegoBloqueado) {
+            mostrarAlerta("", "La partida acabó, ya no puedes usar pistas.", Alert.AlertType.INFORMATION);
+            return;
+        }
+
         ChoiceDialog<String> dialogo = new ChoiceDialog<>("1. Acercar límite superior",
                 "1. Acercar límite superior",
                 "2. Acercar límite inferior",
@@ -525,7 +541,6 @@ public class BetweenleGUI extends Application {
         alerta.setContentText("LA PALABRA ERA: " + juego.getRondaActual().getPalabraSecreta().toUpperCase());
 
         alerta.showAndWait();
-        mostrarMenuPrincipal();
     }
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
