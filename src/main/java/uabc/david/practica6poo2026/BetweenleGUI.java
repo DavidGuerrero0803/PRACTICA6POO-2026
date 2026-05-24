@@ -314,7 +314,9 @@ public class BetweenleGUI extends Application {
         switch (event.getCode()) {
             case ENTER:
                 if (letraIngresada == longitud) {
-
+                    procesarPalabra();
+                } else {
+                    mostrarAlerta(" ", "La palabra no está en la lista.", Alert.AlertType.WARNING);
                 }
                 break;
             case BACK_SPACE:
@@ -357,6 +359,46 @@ public class BetweenleGUI extends Application {
                         "-fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
             }
         }
+    }
+
+    private void procesarPalabra() {
+        StringBuilder sb = new StringBuilder();
+        for (Label casilla : casillasEntrada) {
+            sb.append(casilla.getText());
+        }
+        String intento = sb.toString().toLowerCase();
+
+        String resultado = juego.procesarIntento(intento);
+
+        switch (resultado) {
+            case "longitud":
+                break;
+            case "no encontrada":
+                limpiarCasillas();
+                break;
+            case "fuera de rango":
+                mostrarAlerta(" ", "La palabra " + intento.toUpperCase() + " está fuera de los límites actuales.", Alert.AlertType.WARNING);
+                limpiarCasillas();
+                break;
+            case "antes":
+            case "despues":
+                limpiarCasillas();
+                break;
+            case "correcto":
+                juegoBloqueado = true;
+                break;
+            case "sin intentos":
+                juegoBloqueado = true;
+                break;
+        }
+    }
+
+    private void limpiarCasillas() {
+        letraIngresada = 0;
+        for (Label casilla : casillasEntrada) {
+            casilla.setText("");
+        }
+        mostrarCursor();
     }
 
 
