@@ -277,7 +277,7 @@ public class BetweenleGUI extends Application {
         panelTeclado = new FlowPane(6, 6);
         panelTeclado.setAlignment(Pos.CENTER);
         panelTeclado.setMaxWidth(550);
-
+        crearAbecedario();
 
         pistas = new Button("PEDIR PISTA");
         pistas.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #FFB300; -fx-text-fill: white; -fx-background-radius: 5;");
@@ -286,7 +286,7 @@ public class BetweenleGUI extends Application {
 
         });
 
-        VBox componentesInferiores = new VBox(15, contenedorHistorialAbajo, panelTeclado, pistas);
+        VBox componentesInferiores = new VBox(15, panelTeclado, contenedorHistorialAbajo, pistas);
         componentesInferiores.setAlignment(Pos.CENTER);
         componentesInferiores.setPadding(new Insets(10, 0, 20, 0));
 
@@ -452,6 +452,17 @@ public class BetweenleGUI extends Application {
                     "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; " +
                     "-fx-background-radius: 3;");
             contenedorLimites.getChildren().add(casilla);
+        }
+    }
+
+    private void crearAbecedario() {
+        panelTeclado.getChildren().clear();
+        String alfabeto = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+        for (char c : alfabeto.toCharArray()) {
+            Label letrasAbecedario = new Label(String.valueOf(c));
+            letrasAbecedario.setStyle("-fx-background-color: #E0E0E0; -fx-background-radius: 50em; -fx-font-weight: bold; " +
+                    "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
+            panelTeclado.getChildren().add(letrasAbecedario);
         }
     }
 
