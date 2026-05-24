@@ -1000,6 +1000,7 @@ borough
 bosnia
 boss
 boston
+botch
 both
 bother
 botswana
@@ -1015,6 +1016,7 @@ boundary
 bouquet
 boutique
 bow
+bowel
 bowl
 bowling
 box
@@ -2748,6 +2750,7 @@ easily
 east
 easter
 eastern
+easts
 easy
 eat
 eating

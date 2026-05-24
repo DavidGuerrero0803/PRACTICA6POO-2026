@@ -355,31 +355,37 @@ public class BetweenleGUI extends Application {
         String limiteInferior = ronda.getLimiteInferior().toUpperCase();
         String limiteSuperior = ronda.getLimiteSuperior().toUpperCase();
 
+        // Se construye el prefijo con las letras que el jugador lleva escritas.
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < letraIngresada; i++) {
             sb.append(casillasEntrada[i].getText());
         }
         String prefijo = sb.toString();
 
+        // Por defecto el teclado está habilitado.
         int indiceMin = 0;
         int indiceMax = ALFABETO.length() - 1;
 
+        // La palabra debe ser menor que limiteInferior.
         if (letraIngresada < limiteInferior.length()) {
             String prefijoInferior = limiteInferior.substring(0, letraIngresada);
-
             int comparacion = prefijo.compareTo(prefijoInferior);
 
             if (comparacion == 0) {
+                // Se valida si ambos límites comparten misma letra en una misma posición,
+                // o también si tienen letras distintas en dicha posición.
                 indiceMax = ALFABETO.indexOf(limiteInferior.charAt(letraIngresada));
 
             } else if (comparacion > 0) {
+                // Si el prefijo sobrepasó los límites, el teclado se apagará.
                 indiceMax = -1;
             }
         }
-        if (letraIngresada < limiteSuperior.length()) {
-            String prefSup = limiteSuperior.substring(0, letraIngresada);
 
-            int comparacion = prefijo.compareTo(prefSup);
+        // La palabra debe ser menor que limiteSuperior.
+        if (letraIngresada < limiteSuperior.length()) {
+            String prefijoSuperior = limiteSuperior.substring(0, letraIngresada);
+            int comparacion = prefijo.compareTo(prefijoSuperior);
 
             if (comparacion == 0) {
                 indiceMin = ALFABETO.indexOf(limiteSuperior.charAt(letraIngresada));
