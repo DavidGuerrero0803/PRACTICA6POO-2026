@@ -26,6 +26,7 @@ public class BetweenleGUI extends Application {
     private HBox contenedorIntermedio;
     private HBox contenedorInferior;
     private boolean juegoBloqueado = false;
+    private final String ALFABETO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
 
     @Override
     public void start(Stage stage) {
@@ -326,6 +327,7 @@ public class BetweenleGUI extends Application {
                     letraIngresada--;
                     casillasEntrada[letraIngresada].setText("");
                     mostrarCursor();
+                    actualizarAlfabeto();
                 }
                 break;
             default:
@@ -337,8 +339,58 @@ public class BetweenleGUI extends Application {
                             "-fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
                     letraIngresada++;
                     mostrarCursor();
+                    actualizarAlfabeto();
                 }
                 break;
+        }
+    }
+
+    private void actualizarAlfabeto() {
+        if (juegoBloqueado) return;
+
+        ProcesadorRonda ronda = juego.getRondaActual();
+        boolean sinIntentos = ronda.getHistorialIntentos().isEmpty();
+
+        int indiceMin = 0;
+        int indiceMax = ALFABETO.length() - 1;
+
+        if (!sinIntentos) {
+            String limiteInferior = ronda.getLimiteInferior().toUpperCase();
+            String limiteSuperior = ronda.getLimiteSuperior().toUpperCase();
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < letraIngresada; i++) {
+                sb.append(casillasEntrada[i].getText());
+            }
+            String prefijo = sb.toString();
+
+            if (limiteInferior.startsWith(prefijo) && prefijo.length() < limiteInferior.length()) {
+                char letraMinima = limiteInferior.charAt(prefijo.length());
+                indiceMin = ALFABETO.indexOf(letraMinima);
+            }
+
+            if (limiteSuperior.startsWith(prefijo) && prefijo.length() < limiteSuperior.length()) {
+                char letraMaxima = limiteSuperior.charAt(prefijo.length());
+                indiceMax = ALFABETO.indexOf(letraMaxima);
+            }
+        }
+
+        for (Node nodo : panelTeclado.getChildren()) {
+            if (nodo instanceof Label) {
+                Label etiquetaLetra = (Label) nodo;
+                char letraBoton = etiquetaLetra.getText().charAt(0);
+                int indiceLetraActual = ALFABETO.indexOf(letraBoton);
+
+                if (indiceLetraActual >= indiceMin && indiceLetraActual <= indiceMax) {
+                    etiquetaLetra.setStyle("-fx-background-color: #E0E0E0; -fx-background-radius: 50em; -fx-font-weight: bold; " +
+                            "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
+                    etiquetaLetra.setTextFill(Color.BLACK);
+                } else {
+                    etiquetaLetra.setStyle("-fx-background-color: #EFEFEF; -fx-background-radius: 50em; -fx-font-weight: bold; " +
+                            "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
+                    etiquetaLetra.setTextFill(Color.LIGHTGRAY);
+                }
+            }
         }
     }
 
@@ -427,6 +479,7 @@ public class BetweenleGUI extends Application {
             casilla.setText("");
         }
         mostrarCursor();
+        actualizarAlfabeto();
     }
 
     private void actualizarInterfaz() {
@@ -449,16 +502,7 @@ public class BetweenleGUI extends Application {
         historialPalabras.getItems().clear();
         historialPalabras.getItems().addAll(juego.getHistorial());
 
-        for (Node nodo : panelTeclado.getChildren()) {
-            if (nodo instanceof Label) {
-                Label etiquetaLetra = (Label) nodo;
-                String letra = etiquetaLetra.getText().toLowerCase();
-                if (ronda.getLetrasUsadas().contains(letra)) {
-                    etiquetaLetra.setStyle("-fx-background-color: #B0BEC5; -fx-background-radius: 50em; -fx-font-weight: bold; " +
-                            "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
-                }
-            }
-        }
+        actualizarAlfabeto();
     }
 
     private void dibujarFilaLimite(HBox contenedorLimites, String palabra, String proximidad, String colorHex) {
