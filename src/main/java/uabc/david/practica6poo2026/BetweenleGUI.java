@@ -376,6 +376,7 @@ public class BetweenleGUI extends Application {
             case "longitud":
                 break;
             case "no encontrada":
+                manejarPalabraInexistente(intento);
                 limpiarCasillas();
                 break;
             case "fuera de rango":
@@ -390,10 +391,12 @@ public class BetweenleGUI extends Application {
             case "correcto":
                 actualizarInterfaz();
                 juegoBloqueado = true;
+                mostrarFinJuego(true);
                 break;
             case "sin intentos":
                 actualizarInterfaz();
                 juegoBloqueado = true;
+                mostrarFinJuego(false);
                 break;
         }
     }
@@ -464,6 +467,33 @@ public class BetweenleGUI extends Application {
                     "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
             panelTeclado.getChildren().add(letrasAbecedario);
         }
+    }
+
+    private void manejarPalabraInexistente(String palabra) {
+        Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+        alerta.setTitle(" ");
+        alerta.setHeaderText("La palabra " + palabra.toUpperCase() + " no está en el diccionario.");
+        alerta.setContentText("¿Puedes demostrar que es una palabra válida?");
+
+        ButtonType aceptarIngreso = new ButtonType("Sí, agregarla al diccionario");
+        ButtonType denegarIngreso = new ButtonType("No, escribir otra palabra", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alerta.getButtonTypes().setAll(aceptarIngreso, denegarIngreso);
+
+        alerta.showAndWait().ifPresent(tipo -> {
+            if (tipo == aceptarIngreso) {
+                juego.agregarPalabraAlDiccionario(palabra);
+                mostrarAlerta(" ", "La palabra fue agregada al diccionario. Ahora puedes usarla.", Alert.AlertType.INFORMATION);
+            }
+        });
+    }
+
+    private void mostrarFinJuego(boolean victoria) {
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setHeaderText(victoria ? "ADIVINASTE LA PALABRA" : "TE QUEDASTE SIN INTENTOS");
+        alerta.setContentText("LA PALABRA ERA: " + juego.getRondaActual().getPalabraSecreta().toUpperCase());
+
+        alerta.showAndWait();
+        mostrarMenuPrincipal();
     }
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
