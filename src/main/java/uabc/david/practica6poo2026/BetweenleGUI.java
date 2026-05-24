@@ -283,7 +283,7 @@ public class BetweenleGUI extends Application {
         pistas.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #FFB300; -fx-text-fill: white; -fx-background-radius: 5;");
         pistas.setFocusTraversable(false);
         pistas.setOnAction(e -> {
-
+            manejarPista();
         });
 
         VBox componentesInferiores = new VBox(15, panelTeclado, contenedorHistorialAbajo, pistas);
@@ -483,6 +483,38 @@ public class BetweenleGUI extends Application {
             if (tipo == aceptarIngreso) {
                 juego.agregarPalabraAlDiccionario(palabra);
                 mostrarAlerta(" ", "La palabra fue agregada al diccionario. Ahora puedes usarla.", Alert.AlertType.INFORMATION);
+            }
+        });
+    }
+
+    private void manejarPista() {
+        if (juego.getRondaActual().pistaUtilizada()) {
+            mostrarAlerta("", "Ya usaste tu pista en esta partida.", Alert.AlertType.INFORMATION);
+            return;
+        }
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("1. Acercar límite superior",
+                "1. Acercar límite superior",
+                "2. Acercar límite inferior",
+                "3. Revelar letra inicial");
+
+        dialogo.setTitle(" ");
+        dialogo.setHeaderText("Elige tu pista (solo puedes usar 1 por partida)");
+        dialogo.setContentText("Opción:");
+
+        dialogo.showAndWait().ifPresent(seleccion -> {
+            int opcion = Integer.parseInt(seleccion.substring(0, 1));
+            String resultado = juego.pedirPista(opcion);
+
+            if (resultado.equals("requiere intento")) {
+                mostrarAlerta("Pista no disponible", "Ingresa al menos una palabra para establecer los límites iniciales.",
+                        Alert.AlertType.WARNING);
+            } else if (resultado.equals("demasiado cerca")) {
+                mostrarAlerta("Pista no disponible", "No puedes usar ya esta pista, estás muy cerca.",
+                        Alert.AlertType.WARNING);
+            } else {
+                mostrarAlerta("Pista", resultado, Alert.AlertType.INFORMATION);
+                actualizarInterfaz();
             }
         });
     }

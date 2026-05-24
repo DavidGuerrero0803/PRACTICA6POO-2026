@@ -5074,6 +5074,7 @@ ls
 lt
 ltd
 lu
+lucid
 luck
 lucky
 lunch
