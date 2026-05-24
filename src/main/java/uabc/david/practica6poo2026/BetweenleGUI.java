@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.Node;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -301,8 +302,9 @@ public class BetweenleGUI extends Application {
             contenedorPrincipal.getScene().setOnKeyPressed(this::manejarTeclado);
             contenedorPrincipal.requestFocus();
         });
-        mostrarCursor();
 
+        actualizarInterfaz();
+        mostrarCursor();
     }
 
     private void manejarTeclado(KeyEvent event) {
@@ -383,11 +385,14 @@ public class BetweenleGUI extends Application {
             case "antes":
             case "despues":
                 limpiarCasillas();
+                actualizarInterfaz();
                 break;
             case "correcto":
+                actualizarInterfaz();
                 juegoBloqueado = true;
                 break;
             case "sin intentos":
+                actualizarInterfaz();
                 juegoBloqueado = true;
                 break;
         }
@@ -401,6 +406,54 @@ public class BetweenleGUI extends Application {
         mostrarCursor();
     }
 
+    private void actualizarInterfaz() {
+        ProcesadorRonda ronda = juego.getRondaActual();
+        boolean sinIntentos = ronda.getHistorialIntentos().isEmpty();
+        int longitud = ronda.getLongitudPalabra();
+
+        intentosRestantes.setText("Intentos restantes: " + ronda.getIntentosRestantes());
+
+        String etiquetaSuperior = sinIntentos ? "?" : String.valueOf(ronda.getProximidadSuperior());
+        String palabraArriba = sinIntentos ? "A".repeat(longitud) : ronda.getLimiteSuperior();
+
+        dibujarFilaLimite(contenedorSuperior, palabraArriba, etiquetaSuperior, "#42adf5");
+
+        String etiquetaInferior = sinIntentos ? "?" : String.valueOf(ronda.getProximidadInferior());
+        String palabraAbajo = sinIntentos ? "Z".repeat(longitud) : ronda.getLimiteInferior();
+
+        dibujarFilaLimite(contenedorInferior, palabraAbajo, etiquetaInferior, "#42adf5");
+
+        historialPalabras.getItems().clear();
+        historialPalabras.getItems().addAll(juego.getHistorial());
+
+        for (Node nodo : panelTeclado.getChildren()) {
+            if (nodo instanceof Label) {
+                Label etiquetaLetra = (Label) nodo;
+                String letra = etiquetaLetra.getText().toLowerCase();
+                if (ronda.getLetrasUsadas().contains(letra)) {
+                    etiquetaLetra.setStyle("-fx-background-color: #B0BEC5; -fx-background-radius: 50em; -fx-font-weight: bold; " +
+                            "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
+                }
+            }
+        }
+    }
+
+    private void dibujarFilaLimite(HBox contenedorLimites, String palabra, String proximidad, String colorHex) {
+        contenedorLimites.getChildren().clear();
+
+        Label etiquetaAprox = new Label(proximidad);
+        etiquetaAprox.setStyle("-fx-background-color: #42adf5; -fx-background-radius: 8; -fx-font-weight: bold; -fx-text-fill: white; " +
+                "-fx-alignment: center; -fx-min-width: 35px; -fx-min-height: 25px; -fx-font-size: 12px;");
+        contenedorLimites.getChildren().add(etiquetaAprox);
+
+        for (char c : palabra.toUpperCase().toCharArray()) {
+            Label casilla = new Label(String.valueOf(c));
+            casilla.setStyle("-fx-background-color: " + colorHex + "; -fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold; " +
+                    "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; " +
+                    "-fx-background-radius: 3;");
+            contenedorLimites.getChildren().add(casilla);
+        }
+    }
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
