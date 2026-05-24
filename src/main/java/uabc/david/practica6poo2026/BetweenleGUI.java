@@ -1,19 +1,29 @@
 package uabc.david.practica6poo2026;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class BetweenleGUI extends Application {
 
     private BorderPane contenedorPrincipal;
+    private Betweenle juego;
+    private Label intentosRestantes;
+    private ListView<String> historialPalabras;
+    private FlowPane panelTeclado;
+    private Button pistas;
+    private Label[] casillasEntrada;
+    private int indiceEntrada = 0;
+    private HBox contenedorSuperior;
+    private HBox contenedorIntermedio;
+    private HBox contenedorInferior;
+    private boolean juegoBloqueado = false;
 
     @Override
     public void start(Stage stage) {
@@ -191,9 +201,109 @@ public class BetweenleGUI extends Application {
 
             System.out.println("idioma: " + idiomaElegido + ", dificultad: " + dificultadElegida + " (" + longitudLetras + " letras), intentos: " + intentosElegidos);
 
+            juego = new Betweenle(longitudLetras);
+            boolean iniciado = juego.iniciarPartida(idiomaElegido, dificultadElegida, intentosElegidos);
+
+            if (iniciado) {
+                Stage stageActual = (Stage) contenedorPrincipal.getScene().getWindow();
+                stageActual.setWidth(950);
+                stageActual.setHeight(850);
+                stageActual.centerOnScreen();
+
+                mostrarInterfazJuego();
+            } else {
+                mostrarAlerta("Error", "No se encontraron palabras de " + longitudLetras +
+                        " letras en el diccionario", Alert.AlertType.ERROR);
+            }
+
         });
 
         contenedorPrincipal.setCenter(contenedorCompleto);
+    }
+
+    private void mostrarInterfazJuego() {
+        int longitud = juego.getRondaActual().getLongitudPalabra();
+        juegoBloqueado = false;
+        indiceEntrada = 0;
+
+        intentosRestantes = new Label("Intentos restantes: " + juego.getRondaActual().getIntentosRestantes());
+        intentosRestantes.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+
+        HBox contenedorIntentos = new HBox(50, intentosRestantes);
+        contenedorIntentos.setAlignment(Pos.CENTER);
+        contenedorIntentos.setPadding(new Insets(15, 0, 15, 0));
+
+        contenedorSuperior = new HBox(5);
+        contenedorSuperior.setAlignment(Pos.CENTER);
+
+        contenedorIntermedio = new HBox(5);
+        contenedorIntermedio.setAlignment(Pos.CENTER);
+
+        Region espaciadorInvisible = new Region();
+        espaciadorInvisible.setPrefWidth(35);
+        contenedorIntermedio.getChildren().add(espaciadorInvisible);
+
+        casillasEntrada = new Label[longitud];
+        for (int i = 0; i < longitud; i++) {
+            Label casilla = new Label("");
+            casilla.setStyle("-fx-border-color: #5c5c5c; -fx-border-width: 2; -fx-background-color: white; " +
+                    "-fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; -fx-min-width: 40px; " +
+                    "-fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+            casillasEntrada[i] = casilla;
+            contenedorIntermedio.getChildren().add(casilla);
+        }
+
+        contenedorInferior = new HBox(5);
+        contenedorInferior.setAlignment(Pos.CENTER);
+
+        VBox componentesCentrales = new VBox(12, contenedorSuperior, contenedorIntermedio, contenedorInferior);
+        componentesCentrales.setAlignment(Pos.CENTER);
+        componentesCentrales.setPadding(new Insets(20, 0, 20, 0));
+
+        Label tituloHistorial = new Label("PALABRAS UTILIZADAS");
+        tituloHistorial.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #555555;");
+
+        historialPalabras = new ListView<>();
+        historialPalabras.setPrefHeight(80);
+        historialPalabras.setMaxWidth(600);
+        historialPalabras.setFocusTraversable(false);
+        historialPalabras.setOrientation(javafx.geometry.Orientation.HORIZONTAL);
+
+        VBox contenedorHistorialAbajo = new VBox(5, tituloHistorial, historialPalabras);
+        contenedorHistorialAbajo.setAlignment(Pos.CENTER);
+
+        panelTeclado = new FlowPane(6, 6);
+        panelTeclado.setAlignment(Pos.CENTER);
+        panelTeclado.setMaxWidth(550);
+
+
+        pistas = new Button("PEDIR PISTA");
+        pistas.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #FFB300; -fx-text-fill: white; -fx-background-radius: 5;");
+        pistas.setFocusTraversable(false);
+        pistas.setOnAction(e -> {
+
+        });
+
+        VBox componentesInferiores = new VBox(15, contenedorHistorialAbajo, panelTeclado, pistas);
+        componentesInferiores.setAlignment(Pos.CENTER);
+        componentesInferiores.setPadding(new Insets(10, 0, 20, 0));
+
+        BorderPane interfazCompleta = new BorderPane();
+        interfazCompleta.setTop(contenedorIntentos);
+        interfazCompleta.setCenter(componentesCentrales);
+        interfazCompleta.setBottom(componentesInferiores);
+        interfazCompleta.setRight(null);
+
+        contenedorPrincipal.setCenter(interfazCompleta);
+
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alerta = new Alert(tipo);
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 
     public static void main(String[] args) {
