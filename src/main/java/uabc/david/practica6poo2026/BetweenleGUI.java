@@ -3,6 +3,7 @@ package uabc.david.practica6poo2026;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.scene.input.KeyEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,7 +20,7 @@ public class BetweenleGUI extends Application {
     private FlowPane panelTeclado;
     private Button pistas;
     private Label[] casillasEntrada;
-    private int indiceEntrada = 0;
+    private int letraIngresada = 0;
     private HBox contenedorSuperior;
     private HBox contenedorIntermedio;
     private HBox contenedorInferior;
@@ -224,7 +225,7 @@ public class BetweenleGUI extends Application {
     private void mostrarInterfazJuego() {
         int longitud = juego.getRondaActual().getLongitudPalabra();
         juegoBloqueado = false;
-        indiceEntrada = 0;
+        letraIngresada = 0;
 
         intentosRestantes = new Label("Intentos restantes: " + juego.getRondaActual().getIntentosRestantes());
         intentosRestantes.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
@@ -296,6 +297,45 @@ public class BetweenleGUI extends Application {
 
         contenedorPrincipal.setCenter(interfazCompleta);
 
+        Platform.runLater(() -> {
+            contenedorPrincipal.getScene().setOnKeyPressed(this::manejarTeclado);
+            contenedorPrincipal.requestFocus();
+        });
+
+    }
+
+    private void manejarTeclado(KeyEvent event) {
+        if (juegoBloqueado) {
+            return;
+        }
+        int longitud = juego.getRondaActual().getLongitudPalabra();
+
+        switch (event.getCode()) {
+            case ENTER:
+                if (letraIngresada == longitud) {
+
+                }
+                break;
+            case BACK_SPACE:
+                if (letraIngresada > 0) {
+                    letraIngresada--;
+                    casillasEntrada[letraIngresada].setText("");
+                    casillasEntrada[letraIngresada].setStyle("-fx-border-color: #CCCCCC; -fx-border-width: 2; " +
+                            "-fx-background-color: white; -fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; " +
+                            "-fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+                }
+                break;
+            default:
+                String letra = event.getText().toUpperCase();
+                if (letra.matches("[A-ZÑ]") && letraIngresada < longitud) {
+                    casillasEntrada[letraIngresada].setText(letra);
+                    casillasEntrada[letraIngresada].setStyle("-fx-border-color: #555555; -fx-border-width: 2; " +
+                            "-fx-background-color: white; -fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; " +
+                            "-fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+                    letraIngresada++;
+                }
+                break;
+        }
     }
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
