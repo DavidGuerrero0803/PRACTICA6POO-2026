@@ -45,7 +45,7 @@ public class BetweenleGUI extends Application {
 
         mostrarMenuPrincipal();
 
-        Scene scene = new Scene(contenedorPrincipal, 700, 850);
+        Scene scene = new Scene(contenedorPrincipal, 550, 650);
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
@@ -161,13 +161,13 @@ public class BetweenleGUI extends Application {
         contenedorOpciones.setPadding(new Insets(20));
 
         Button comenzar = new Button("COMENZAR");
-        comenzar.setPrefWidth(250);
-        comenzar.setPrefHeight(50);
+        comenzar.setPrefWidth(220);
+        comenzar.setPrefHeight(40);
         comenzar.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 5;");
 
         Button regresar = new Button("VOLVER");
-        regresar.setPrefWidth(250);
-        regresar.setPrefHeight(50);
+        regresar.setPrefWidth(220);
+        regresar.setPrefHeight(40);
         regresar.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-background-color: #f57242; -fx-text-fill: white; -fx-background-radius: 5;");
         regresar.setOnAction(e -> {
             mostrarMenuPrincipal();
@@ -384,8 +384,17 @@ public class BetweenleGUI extends Application {
                 limpiarCasillas();
                 break;
             case "fuera de rango":
-                mostrarAlerta(" ", "La palabra " + intento.toUpperCase() + " está fuera de los límites actuales.",
-                        Alert.AlertType.WARNING);
+                String limSuperior = juego.getRondaActual().getLimiteSuperior().toUpperCase();
+                String limInferior = juego.getRondaActual().getLimiteInferior().toUpperCase();
+
+                if (intento.toLowerCase().compareTo(limSuperior.toLowerCase()) <= 0) {
+                    mostrarAlerta(" ", "Ingresa una palabra alfabéticamente posterior a " + limSuperior + ".",
+                            Alert.AlertType.WARNING);
+                } else {
+                    mostrarAlerta(" ", "Ingresa una palabra alfabéticamente anterior a " + limInferior + ".",
+                            Alert.AlertType.WARNING);
+                }
+
                 limpiarCasillas();
                 break;
             case "antes":
@@ -430,12 +439,12 @@ public class BetweenleGUI extends Application {
         String etiquetaSuperior = sinIntentos ? "?" : String.valueOf(ronda.getProximidadSuperior());
         String palabraArriba = sinIntentos ? "A".repeat(longitud) : ronda.getLimiteSuperior();
 
-        dibujarFilaLimite(contenedorSuperior, palabraArriba, etiquetaSuperior, "#42adf5");
+        dibujarFilaLimite(contenedorSuperior, palabraArriba, etiquetaSuperior, "#03a9f4");
 
         String etiquetaInferior = sinIntentos ? "?" : String.valueOf(ronda.getProximidadInferior());
         String palabraAbajo = sinIntentos ? "Z".repeat(longitud) : ronda.getLimiteInferior();
 
-        dibujarFilaLimite(contenedorInferior, palabraAbajo, etiquetaInferior, "#42adf5");
+        dibujarFilaLimite(contenedorInferior, palabraAbajo, etiquetaInferior, "#03a9f4");
 
         historialPalabras.getItems().clear();
         historialPalabras.getItems().addAll(juego.getHistorial());
@@ -456,7 +465,7 @@ public class BetweenleGUI extends Application {
         contenedorLimites.getChildren().clear();
 
         Label etiquetaAprox = new Label(proximidad);
-        etiquetaAprox.setStyle("-fx-background-color: #42adf5; -fx-background-radius: 8; -fx-font-weight: bold; -fx-text-fill: white; " +
+        etiquetaAprox.setStyle("-fx-background-color: #03a9f4; -fx-background-radius: 8; -fx-font-weight: bold; -fx-text-fill: white; " +
                 "-fx-alignment: center; -fx-min-width: 35px; -fx-min-height: 25px; -fx-font-size: 12px;");
         contenedorLimites.getChildren().add(etiquetaAprox);
 
