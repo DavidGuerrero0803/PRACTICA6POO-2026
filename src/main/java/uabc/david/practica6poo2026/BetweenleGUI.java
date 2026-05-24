@@ -380,6 +380,12 @@ public class BetweenleGUI extends Application {
                 // Si el prefijo sobrepasó los límites, el teclado se apagará.
                 indiceMax = -1;
             }
+        } else {
+            // Si las casillas están llenas con un prefijo mayor
+            // que el límite inferior, el teclado se apagará.
+            if (prefijo.compareTo(limiteInferior) > 0) {
+                indiceMax = -1;
+            }
         }
 
         // La palabra debe ser menor que limiteSuperior.
@@ -393,6 +399,12 @@ public class BetweenleGUI extends Application {
             } else if (comparacion < 0) {
                 indiceMin = ALFABETO.length();
             }
+        } else {
+            // Si las casillas están llenas con un prefijo menor
+            // que el límite superior, el teclado se apagará.
+            if (prefijo.compareTo(limiteSuperior) < 0) {
+                indiceMin = ALFABETO.length();
+            }
         }
 
         for (Node nodo : panelTeclado.getChildren()) {
@@ -402,12 +414,12 @@ public class BetweenleGUI extends Application {
                 int indiceLetraActual = ALFABETO.indexOf(letraBoton);
 
                 if (indiceLetraActual >= indiceMin && indiceLetraActual <= indiceMax) {
-                    etiquetaLetra.setStyle("-fx-background-color: #E0E0E0; -fx-background-radius: 50em; -fx-font-weight: bold; " +
-                            "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
-                    etiquetaLetra.setTextFill(Color.BLACK);
+                    etiquetaLetra.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 50em; -fx-font-weight: bold;" +
+                            "-fx-font-size: 18px; -fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
+                    etiquetaLetra.setTextFill(Color.GRAY);
                 } else {
-                    etiquetaLetra.setStyle("-fx-background-color: #F5F5F5; -fx-background-radius: 50em; -fx-font-weight: bold; " +
-                            "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
+                    etiquetaLetra.setStyle("-fx-background-color: #e3e3e3; -fx-background-radius: 50em; -fx-font-weight: bold;" +
+                            "-fx-font-size: 18px; -fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
                     etiquetaLetra.setTextFill(Color.LIGHTGRAY);
                 }
             }

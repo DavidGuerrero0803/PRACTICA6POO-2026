@@ -3621,7 +3621,6 @@ garden
 gardening
 gardens
 garlic
-garmin
 gary
 gas
 gasoline
@@ -3721,6 +3720,7 @@ global
 globe
 glory
 glossary
+glove
 gloves
 glow
 glucose
@@ -4531,7 +4531,6 @@ iran
 iraq
 irc
 ireland
-irish
 iron
 irrigation
 irs
@@ -6197,6 +6196,7 @@ peaceful
 peak
 pearl
 peas
+pedestrian
 pediatric
 pee
 peer
@@ -6520,6 +6520,7 @@ powell
 power
 powered
 powerful
+powerfully
 powerpoint
 powers
 powerseller
@@ -6668,6 +6669,7 @@ profession
 professional
 professionals
 professor
+professors
 profile
 profiles
 profit
@@ -6684,6 +6686,7 @@ progressive
 prohibited
 project
 projected
+projectile
 projection
 projector
 projectors
@@ -6760,6 +6763,7 @@ pst
 psychiatry
 psychological
 psychology
+psychopath
 pt
 pts
 pty
@@ -6803,7 +6807,6 @@ pursuit
 push
 pushed
 pushing
-pussy
 put
 puts
 putting
@@ -6829,6 +6832,7 @@ quantitative
 quantities
 quantity
 quantum
+quarantine
 quarter
 quarterly
 quarters
@@ -6971,6 +6975,7 @@ receiving
 recent
 recently
 reception
+receptions
 receptor
 receptors
 recipe
