@@ -301,6 +301,7 @@ public class BetweenleGUI extends Application {
             contenedorPrincipal.getScene().setOnKeyPressed(this::manejarTeclado);
             contenedorPrincipal.requestFocus();
         });
+        mostrarCursor();
 
     }
 
@@ -320,23 +321,44 @@ public class BetweenleGUI extends Application {
                 if (letraIngresada > 0) {
                     letraIngresada--;
                     casillasEntrada[letraIngresada].setText("");
-                    casillasEntrada[letraIngresada].setStyle("-fx-border-color: #CCCCCC; -fx-border-width: 2; " +
-                            "-fx-background-color: white; -fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; " +
-                            "-fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+                    mostrarCursor();
                 }
                 break;
             default:
                 String letra = event.getText().toUpperCase();
                 if (letra.matches("[A-ZÑ]") && letraIngresada < longitud) {
                     casillasEntrada[letraIngresada].setText(letra);
-                    casillasEntrada[letraIngresada].setStyle("-fx-border-color: #555555; -fx-border-width: 2; " +
-                            "-fx-background-color: white; -fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; " +
+                    casillasEntrada[letraIngresada].setStyle("-fx-border-width: 2; " +
+                            "-fx-background-color: #f57242; -fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; " +
                             "-fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
                     letraIngresada++;
+                    mostrarCursor();
                 }
                 break;
         }
     }
+
+    private void mostrarCursor() {
+        if (juegoBloqueado) {
+            return;
+        }
+
+        for (int i = 0; i < casillasEntrada.length; i++) {
+            if (i == letraIngresada && casillasEntrada[i].getText().equals("•")) {
+                casillasEntrada[i].setText("•");
+                 casillasEntrada[i].setStyle("-fx-border-color: #5c5c5c; -fx-border-width: 2; -fx-background-color: #f57242; " +
+                         "-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; -fx-min-width: 40px; " +
+                         "-fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+            }
+            else if (casillasEntrada[i].getText().isEmpty()) {
+                casillasEntrada[i].setText("");
+                casillasEntrada[i].setStyle("-fx-border-color: #5c5c5c; -fx-border-width: 2; -fx-background-color: white; " +
+                        "-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; -fx-min-width: 40px; " +
+                        "-fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+            }
+        }
+    }
+
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
