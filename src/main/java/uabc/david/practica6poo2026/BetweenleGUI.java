@@ -346,32 +346,46 @@ public class BetweenleGUI extends Application {
     }
 
     private void actualizarAlfabeto() {
-        if (juegoBloqueado) return;
+        if (juegoBloqueado) {
+            return;
+        }
 
         ProcesadorRonda ronda = juego.getRondaActual();
-        boolean sinIntentos = ronda.getHistorialIntentos().isEmpty();
+
+        String limiteInferior = ronda.getLimiteInferior().toUpperCase();
+        String limiteSuperior = ronda.getLimiteSuperior().toUpperCase();
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < letraIngresada; i++) {
+            sb.append(casillasEntrada[i].getText());
+        }
+        String prefijo = sb.toString();
 
         int indiceMin = 0;
         int indiceMax = ALFABETO.length() - 1;
 
-        if (!sinIntentos) {
-            String limiteInferior = ronda.getLimiteInferior().toUpperCase();
-            String limiteSuperior = ronda.getLimiteSuperior().toUpperCase();
+        if (letraIngresada < limiteInferior.length()) {
+            String prefijoInferior = limiteInferior.substring(0, letraIngresada);
 
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < letraIngresada; i++) {
-                sb.append(casillasEntrada[i].getText());
+            int comparacion = prefijo.compareTo(prefijoInferior);
+
+            if (comparacion == 0) {
+                indiceMax = ALFABETO.indexOf(limiteInferior.charAt(letraIngresada));
+
+            } else if (comparacion > 0) {
+                indiceMax = -1;
             }
-            String prefijo = sb.toString();
+        }
+        if (letraIngresada < limiteSuperior.length()) {
+            String prefSup = limiteSuperior.substring(0, letraIngresada);
 
-            if (limiteInferior.startsWith(prefijo) && prefijo.length() < limiteInferior.length()) {
-                char letraMinima = limiteInferior.charAt(prefijo.length());
-                indiceMin = ALFABETO.indexOf(letraMinima);
-            }
+            int comparacion = prefijo.compareTo(prefSup);
 
-            if (limiteSuperior.startsWith(prefijo) && prefijo.length() < limiteSuperior.length()) {
-                char letraMaxima = limiteSuperior.charAt(prefijo.length());
-                indiceMax = ALFABETO.indexOf(letraMaxima);
+            if (comparacion == 0) {
+                indiceMin = ALFABETO.indexOf(limiteSuperior.charAt(letraIngresada));
+
+            } else if (comparacion < 0) {
+                indiceMin = ALFABETO.length();
             }
         }
 
@@ -386,7 +400,7 @@ public class BetweenleGUI extends Application {
                             "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
                     etiquetaLetra.setTextFill(Color.BLACK);
                 } else {
-                    etiquetaLetra.setStyle("-fx-background-color: #EFEFEF; -fx-background-radius: 50em; -fx-font-weight: bold; " +
+                    etiquetaLetra.setStyle("-fx-background-color: #F5F5F5; -fx-background-radius: 50em; -fx-font-weight: bold; " +
                             "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
                     etiquetaLetra.setTextFill(Color.LIGHTGRAY);
                 }
