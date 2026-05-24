@@ -229,7 +229,7 @@ public class BetweenleGUI extends Application {
         juegoBloqueado = false;
         letraIngresada = 0;
 
-        intentosRestantes = new Label("Intentos restantes: " + juego.getRondaActual().getIntentosRestantes());
+        intentosRestantes = new Label("Intentos: 0/" + juego.getRondaActual().getIntentosRestantes());
         intentosRestantes.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
         HBox contenedorIntentos = new HBox(50, intentosRestantes);
@@ -498,8 +498,8 @@ public class BetweenleGUI extends Application {
                 mostrarFinJuego(true);
                 break;
             case "sin intentos":
-                actualizarInterfaz();
                 juegoBloqueado = true;
+                actualizarInterfaz();
                 mostrarFinJuego(false);
                 break;
         }
@@ -519,7 +519,15 @@ public class BetweenleGUI extends Application {
         boolean sinIntentos = ronda.getHistorialIntentos().isEmpty();
         int longitud = ronda.getLongitudPalabra();
 
-        intentosRestantes.setText("Intentos restantes: " + ronda.getIntentosRestantes());
+        int totalIntentos = ronda.getHistorialIntentos().size() + ronda.getIntentosRestantes();
+
+        int intentoActual = ronda.getHistorialIntentos().size() + 1;
+
+        if (intentoActual > totalIntentos) {
+            intentoActual = totalIntentos;
+        }
+
+        intentosRestantes.setText("Intentos: " + intentoActual + "/" + totalIntentos);
 
         String etiquetaSuperior = sinIntentos ? "?" : String.valueOf(ronda.getProximidadSuperior());
         String palabraArriba = sinIntentos ? "A".repeat(longitud) : ronda.getLimiteSuperior();
