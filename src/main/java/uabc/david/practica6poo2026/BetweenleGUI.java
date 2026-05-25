@@ -34,6 +34,7 @@ public class BetweenleGUI extends Application {
 
     @Override
     public void start(Stage stage) {
+        stage.setTitle("Betweenle");
         this.stagePrincipal = stage;
         contenedorPrincipal = new BorderPane();
 
