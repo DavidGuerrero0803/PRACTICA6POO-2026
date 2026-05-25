@@ -178,10 +178,10 @@ public class BetweenleGUI extends Application {
         HBox contenedorDificultades = new HBox(15, modoFacil, modoMedio, modoDificil);
         contenedorDificultades.setAlignment(Pos.CENTER);
 
-        // Si el jugador elige "Difícil", se mostrará un Spinner que le deja elegir entre 7 y 15 (letras).
-        Label letras = new Label("Letras en difícil (7-15)");
+        // Si el jugador elige "Difícil", se mostrará un Spinner que le deja elegir entre 7 y 14 (letras).
+        Label letras = new Label("Letras en difícil (7-14)");
         letras.setStyle(estiloEtiqueta);
-        Spinner<Integer> spinnerLetras = new Spinner<>(7, 15, 7);
+        Spinner<Integer> spinnerLetras = new Spinner<>(7, 14, 7);
         spinnerLetras.setPrefWidth(100);
         spinnerLetras.setDisable(true);
 
@@ -874,7 +874,7 @@ public class BetweenleGUI extends Application {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         String tituloWin = enIngles ? "YOU GUESSED THE WORD" : "ADIVINASTE LA PALABRA";
         String tituloLose = enIngles ? "YOU DIDN'T GUESS THE WORD" : "TE QUEDASTE SIN INTENTOS";
-
+        alerta.setTitle("");
         alerta.setHeaderText(victoria ? tituloWin : tituloLose);
         alerta.setContentText((enIngles ? "THE WORD WAS " : "LA PALABRA ERA ") +
                 juego.getRondaActual().getPalabraSecreta().toUpperCase());
