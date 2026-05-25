@@ -855,6 +855,7 @@ public class BetweenleGUI extends Application {
             } else {
                 mostrarAlerta(enIngles ? "Hint" : "Pista", resultado, Alert.AlertType.INFORMATION);
                 actualizarInterfaz();
+                actualizarAlfabeto();
             }
         });
     }
