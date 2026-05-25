@@ -209,7 +209,7 @@ public class BetweenleGUI extends Application {
 
             if (iniciado) {
                 Stage stageActual = (Stage) contenedorPrincipal.getScene().getWindow();
-                stageActual.setWidth(950);
+                stageActual.setWidth(850);
                 stageActual.setHeight(850);
                 stageActual.centerOnScreen();
 
@@ -485,6 +485,16 @@ public class BetweenleGUI extends Application {
             case "despues":
                 limpiarCasillas();
                 actualizarInterfaz();
+                if (juego.getRondaActual().getIntentosRestantes() <= 0) {
+                    juegoBloqueado = true;
+                    for (Label casilla : casillasEntrada) {
+                        casilla.setTextFill(Color.WHITE);
+                        casilla.setStyle("-fx-border-color: #ffffff; -fx-border-width: 2; -fx-background-color: #ffffff; " +
+                                "-fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; " +
+                                "-fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+                    }
+                    mostrarFinJuego(false);
+                }
                 break;
             case "correcto":
                 actualizarInterfaz();
