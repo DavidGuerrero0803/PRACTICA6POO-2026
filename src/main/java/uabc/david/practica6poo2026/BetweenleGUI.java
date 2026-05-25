@@ -91,14 +91,16 @@ public class BetweenleGUI extends Application {
         contenedorPrincipal.setTop(contenedorSuperior);
 
         // Uso de la subclase ImageButton para crear el botón de JUGAR.
-        ImageButton jugar = new ImageButton("src/main/java/uabc/david/practica6poo2026/boton_jugar.png", 400, 50);
+        ImageButton jugar = new ImageButton("src/main/java/uabc/david/practica6poo2026/boton_jugar.png",
+                400, 50);
         jugar.setOnAction(e -> {
             // Al presionarlo, mostrará al jugador el menú de configuración de partida.
             mostrarConfiguracion();
         });
 
         // Uso de la subclase ImageButton para crear el botón de SALIR.
-        ImageButton salir = new ImageButton("src/main/java/uabc/david/practica6poo2026/boton_salir.png", 400, 50);
+        ImageButton salir = new ImageButton("src/main/java/uabc/david/practica6poo2026/boton_salir.png",
+                400, 50);
         salir.setOnAction(e -> {
             // Al presionarlo, el programa se cerrará.
             Platform.exit();
@@ -335,21 +337,24 @@ public class BetweenleGUI extends Application {
         intentosRestantes.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
         // Uso de ImageButton para crear un botón con el icono del Betweenle para volver al menú.
-        ImageButton menu = new ImageButton("src/main/java/uabc/david/practica6poo2026/casa_menu.png", 50, 50);
+        ImageButton menu = new ImageButton("src/main/java/uabc/david/practica6poo2026/casa_menu.png",
+                50, 50);
         menu.setFocusTraversable(false);
         menu.setOnAction(e -> {
             mostrarMenuPrincipal();
         });
 
         // Uso de ImageButton para crear un botón con forma de bombilla para solicitar pistas.
-        ImageButton pistas = new ImageButton("src/main/java/uabc/david/practica6poo2026/idea_pista.png", 50, 50);
+        ImageButton pistas = new ImageButton("src/main/java/uabc/david/practica6poo2026/idea_pista.png",
+                50, 50);
         pistas.setFocusTraversable(false);
         pistas.setOnAction(e -> {
             manejarPista();
         });
 
         // Uso de ImageButton para crear un botón con forma de estadística para mostrar eso.
-        ImageButton estadisticas = new ImageButton("src/main/java/uabc/david/practica6poo2026/stats_estadisticas.png", 50, 50);
+        ImageButton estadisticas = new ImageButton("src/main/java/uabc/david/practica6poo2026/stats_estadisticas.png",
+                50, 50);
         estadisticas.setFocusTraversable(false);
         estadisticas.setOnAction(e -> {
             mostrarEstadisticas();

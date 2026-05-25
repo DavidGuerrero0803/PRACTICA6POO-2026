@@ -16,24 +16,24 @@ public class ImageButton extends Button {
 
     /**
      * Constructor principal: Crea el botón cargando la imagen en su tamaño original.
-     * @param imagePath Ruta de la imagen.
+     * @param imagearchivoImagen Ruta de la imagen.
      */
-    public ImageButton(String imagePath) {
+    public ImageButton(String imagearchivoImagen) {
         super();
         inicializarImageView();
-        cargarImagen(imagePath);
+        cargarImagen(imagearchivoImagen);
         setearEfectos();
         aplicarEstilo();
     }
 
     /**
      * Constructor parametrizado: Crea el botón y ajusta la imagen a un tamaño específico.
-     * @param imagePath Ruta de la imagen.
+     * @param imagearchivoImagen Ruta de la imagen.
      * @param width Ancho deseado.
      * @param height Alto deseado.
      */
-    public ImageButton(String imagePath, double width, double height) {
-        this(imagePath);
+    public ImageButton(String imagearchivoImagen, double width, double height) {
+        this(imagearchivoImagen);
         setImageSize(width, height);
     }
 
@@ -57,15 +57,15 @@ public class ImageButton extends Button {
     /**
      * Carga la imagen desde la ruta proporcionada.
      */
-    private void cargarImagen(String path) {
+    private void cargarImagen(String archivoImagen) {
         try {
-            File file = new File(path);
+            File file = new File(archivoImagen);
             if (file.exists()) {
                 Image image = new Image(file.toURI().toString());
                 imageView.setImage(image);
                 imageView.setPreserveRatio(true);
             } else {
-                System.err.println("Imagen no encontrada en la ruta: " + path);
+                System.err.println("Imagen no encontrada en la ruta: " + archivoImagen);
             }
         } catch (Exception e) {
             System.err.println("Error al cargar la imagen: " + e.getMessage());
