@@ -774,7 +774,7 @@ public class BetweenleGUI extends Application {
     }
 
     /**
-     * Genera los botones que conforman el teclado dinámico inferior.
+     * Genera los labels que conforman el teclado dinámico inferior.
      */
     private void crearAbecedario() {
         panelTeclado.getChildren().clear();

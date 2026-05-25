@@ -29,12 +29,12 @@ public class ImageButton extends Button {
     /**
      * Constructor parametrizado: Crea el botón y ajusta la imagen a un tamaño específico.
      * @param imagearchivoImagen Ruta de la imagen.
-     * @param width Ancho deseado.
-     * @param height Alto deseado.
+     * @param ancho Ancho deseado.
+     * @param alto Alto deseado.
      */
-    public ImageButton(String imagearchivoImagen, double width, double height) {
+    public ImageButton(String imagearchivoImagen, double ancho, double alto) {
         this(imagearchivoImagen);
-        setImageSize(width, height);
+        setImageSize(ancho, alto);
     }
 
     /**
@@ -82,8 +82,8 @@ public class ImageButton extends Button {
     /**
      * Ajusta el tamaño de visualización de la imagen.
      */
-    public void setImageSize(double width, double height) {
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
+    public void setImageSize(double ancho, double alto) {
+        imageView.setFitWidth(ancho);
+        imageView.setFitHeight(alto);
     }
 }
