@@ -15,8 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
- * Esta clase provee la interfaz de usuario gráfica (GUI) para el Betweenle.
- * Muestra menús, lee entradas y presenta los resultados.
+ * Esta clase provee la interfaz de usuario gráfica (GUI) para el juego Betweenle.
+ * Gestiona los menús, captura las entradas del teclado y actualiza la vista de los resultados.
  */
 public class BetweenleGUI extends Application {
     private BorderPane contenedorPrincipal;
@@ -35,6 +35,10 @@ public class BetweenleGUI extends Application {
     private boolean enIngles = false;
     private Stage stagePrincipal;
 
+    /**
+     * Ejecuta y muestra el principal del juego.
+     * @param stage El stage principal de la aplicación.
+     */
     @Override
     public void start(Stage stage) {
         stage.setTitle("Betweenle");
@@ -47,6 +51,7 @@ public class BetweenleGUI extends Application {
         subtitulo.setStyle("-fx-font-weight: bold; -fx-font-size: 15px;");
         subtitulo.setTextFill(Color.GRAY);
 
+        // Agrupa el título y subtítulo en la parte superior central.
         VBox contenedorTitulo = new VBox(titulo, subtitulo);
         contenedorTitulo.setAlignment(Pos.TOP_CENTER);
         contenedorTitulo.setPadding(new Insets(20, 0, 20, 0));
@@ -61,6 +66,9 @@ public class BetweenleGUI extends Application {
         stage.show();
     }
 
+    /**
+     * Crea y muestra la pantalla inicial con los botones de JUGAR y SALIR.
+     */
     private void mostrarMenuPrincipal() {
         titulo = new Label("BETWEENLE");
         titulo.setStyle("-fx-font-weight: bold; -fx-font-size: 50px;");
@@ -77,20 +85,12 @@ public class BetweenleGUI extends Application {
         contenedorSuperior.setAlignment(Pos.CENTER);
         contenedorPrincipal.setTop(contenedorSuperior);
 
-        SoundButton jugar = new SoundButton("JUGAR",
-                "src/main/java/uabc/david/practica6poo2026/Menu_Open.wav",
-                "#42adf5", "#2a8cd8", "#ffffff");
-        jugar.setPrefWidth(400);
-        jugar.setPrefHeight(50);
-        jugar.setOnAction(e-> {
+        ImageButton jugar = new ImageButton("src/main/java/uabc/david/practica6poo2026/boton_jugar.png", 400, 50);
+        jugar.setOnAction(e -> {
             mostrarConfiguracion();
         });
 
-        SoundButton salir = new SoundButton("SALIR",
-                "src/main/java/uabc/david/practica6poo2026/Menu_Close.wav",
-                "#f54242", "#d61a1a", "#ffffff");
-        salir.setPrefWidth(400);
-        salir.setPrefHeight(50);
+        ImageButton salir = new ImageButton("src/main/java/uabc/david/practica6poo2026/boton_salir.png", 400, 50);
         salir.setOnAction(e -> {
             Platform.exit();
         });
@@ -107,6 +107,10 @@ public class BetweenleGUI extends Application {
         }
     }
 
+    /**
+     * Despliega la interfaz del menú de configuración inicial.
+     * Permite al usuario seleccionar el idioma, la dificultad y los intentos.
+     */
     private void mostrarConfiguracion() {
         String estiloEtiqueta = "-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;";
 
@@ -273,6 +277,10 @@ public class BetweenleGUI extends Application {
         contenedorPrincipal.setCenter(contenedorCompleto);
     }
 
+    /**
+     * Inicializa y despliega la pantalla principal de la ronda del juego.
+     * Muestra los intentos, imágenes botón, las casillas de texto y el historial.
+     */
     private void mostrarInterfazJuego() {
         int longitud = juego.getRondaActual().getLongitudPalabra();
         juegoBloqueado = false;
@@ -382,6 +390,10 @@ public class BetweenleGUI extends Application {
         }
     }
 
+    /**
+     * Ejecuta la acción lógica asociada a la tecla usada del teclado (Letra, Delete o Enter).
+     * @param event El texto introducido con el teclado.
+     */
     private void manejarTeclado(KeyEvent event) {
         if (juegoBloqueado) {
             return;
@@ -544,6 +556,9 @@ public class BetweenleGUI extends Application {
         }
     }
 
+    /**
+     * Captura el texto de las casillas y lo evalúa con las validaciones establecidas.
+     */
     private void procesarPalabra() {
         StringBuilder sb = new StringBuilder();
         for (Label casilla : casillasEntrada) {
@@ -617,6 +632,9 @@ public class BetweenleGUI extends Application {
         actualizarAlfabeto();
     }
 
+    /**
+     * Actualiza la interfaz con las etiquetas, historial y el alfabeto/teclado inferior.
+     */
     private void actualizarInterfaz() {
         ProcesadorRonda ronda = juego.getRondaActual();
         boolean sinIntentos = ronda.getHistorialIntentos().isEmpty();
@@ -675,6 +693,11 @@ public class BetweenleGUI extends Application {
         }
     }
 
+    /**
+     * Muestra un Alert interactivo en caso de escribir una palabra que no está en los diccionarios.
+     * Permite integrarla al diccionario de forma permanente si el jugador la toma como válida.
+     * @param palabra La palabra que no se encontró en los archivos de texto.
+     */
     private void manejarPalabraInexistente(String palabra) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle(" ");
@@ -695,19 +718,25 @@ public class BetweenleGUI extends Application {
         });
     }
 
+    /**
+     * Muestra la interfaz interactiva para seleccionar y consumir la pista de la ronda.
+     */
     private void manejarPista() {
+        // Condición que se ejecuta si la pista ya fue utilizada en la sesión.
         if (juego.getRondaActual().pistaUtilizada()) {
             mostrarAlerta("", enIngles ? "You already used your hint in this game." : 
                     "Ya usaste tu pista en esta partida.", Alert.AlertType.INFORMATION);
             return;
         }
 
+        // Condición que se ejecuta si la partida ya terminó.
         if (juegoBloqueado) {
             mostrarAlerta("", enIngles ? "The game is over, you cannot use hints anymore." : 
                     "La partida acabó, ya no puedes usar pistas.", Alert.AlertType.INFORMATION);
             return;
         }
 
+        // Opciones que se le darán al usuario para escoger su pista.
         String op1 = enIngles ? "1. Move upper limit closer" : "1. Acercar límite superior";
         String op2 = enIngles ? "2. Move lower limit closer" : "2. Acercar límite inferior";
         String op3 = enIngles ? "3. Reveal starting letter" : "3. Revelar letra inicial";
@@ -722,11 +751,13 @@ public class BetweenleGUI extends Application {
             int opcion = Integer.parseInt(seleccion.substring(0, 1));
             String resultado = juego.pedirPista(opcion);
 
+            // Se valida que las pistas 1 y 2 requieren al menos un intento previo.
             if (resultado.equals("requiere intento")) {
                 mostrarAlerta(enIngles ? "Hint unavailable" : "Pista no disponible",
                         enIngles ? "Enter at least one word to establish the initial limits." : 
                                 "Ingresa al menos una palabra para establecer los límites iniciales.",
                         Alert.AlertType.WARNING);
+                // Se valida también que pueda usar la pista en una aproximación mayor o igual a 2.00.
             } else if (resultado.equals("demasiado cerca")) {
                 mostrarAlerta(enIngles ? "Hint unavailable" : "Pista no disponible",
                         enIngles ? "You cannot use this hint anymore, you are too close." : 
@@ -739,6 +770,10 @@ public class BetweenleGUI extends Application {
         });
     }
 
+    /**
+     * Genera la alerta de finalización de partida mostrando si el jugador ganó o perdió.
+     * @param victoria true si la palabra secreta fue descubierta, false en caso contrario.
+     */
     private void mostrarFinJuego(boolean victoria) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         reiniciarTeclado();
@@ -752,6 +787,12 @@ public class BetweenleGUI extends Application {
         alerta.showAndWait();
     }
 
+    /**
+     * Construye y despliega un cuadro emergente (Alert).
+     * @param titulo El título de la ventana de la alerta.
+     * @param mensaje El contenido del texto a mostrar en el cuerpo.
+     * @param tipo El tipo de la alerta (WARNING, INFORMATION o ERROR).
+     */
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
@@ -804,6 +845,9 @@ public class BetweenleGUI extends Application {
                 "-fx-background-radius: 5;");
     }
 
+    /**
+     * Función main qur arranca la ejecución de la aplicación.
+     */
     public static void main(String[] args) {
         launch();
     }
