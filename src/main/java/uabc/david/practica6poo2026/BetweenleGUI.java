@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.scene.Cursor;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Node;
 import javafx.geometry.Pos;
@@ -72,13 +73,10 @@ public class BetweenleGUI extends Application {
         contenedorSuperior.setAlignment(Pos.CENTER);
         contenedorPrincipal.setTop(contenedorSuperior);
 
-        Button jugar = new Button("JUGAR");
+        SoundButton jugar = new SoundButton("JUGAR");
         jugar.setPrefWidth(400);
         jugar.setPrefHeight(50);
-        jugar.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-background-color: #42adf5; " +
-                "-fx-text-fill: white; -fx-background-radius: 5;");
-
-        jugar.setOnAction(e -> {
+        jugar.setOnAction(event -> {
             mostrarConfiguracion();
         });
 
