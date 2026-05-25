@@ -82,12 +82,11 @@ public class BetweenleGUI extends Application {
             mostrarConfiguracion();
         });
 
-        Button salir = new Button("SALIR");
+        SoundButton salir = new SoundButton("SALIR",
+                "src/main/java/uabc/david/practica6poo2026/Menu_Close.wav",
+                "#f54242", "#d61a1a", "#ffffff");
         salir.setPrefWidth(400);
         salir.setPrefHeight(50);
-        salir.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-background-color: #f54242; " +
-                "-fx-text-fill: white; -fx-background-radius: 5;");
-
         salir.setOnAction(e -> {
             Platform.exit();
         });
@@ -106,20 +105,26 @@ public class BetweenleGUI extends Application {
 
     private void mostrarConfiguracion() {
         String estiloEtiqueta = "-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;";
-        String estiloToggle = "-fx-font-size: 14px; -fx-font-weight: bold; -fx-min-width: 110px; -fx-min-height: 35px;";
 
         Label idioma = new Label("Selecciona el idioma del diccionario");
         idioma.setStyle(estiloEtiqueta);
 
         ToggleButton toggleESP = new ToggleButton("Español");
         ToggleButton toggleENG = new ToggleButton("Inglés");
-        toggleESP.setStyle(estiloToggle);
-        toggleENG.setStyle(estiloToggle);
+
+        configurarToggle(toggleESP, "#E0E0E0", "#CCCCCC", "#42adf5");
+        configurarToggle(toggleENG, "#E0E0E0", "#CCCCCC", "#42adf5");
 
         ToggleGroup grupoIdioma = new ToggleGroup();
         toggleESP.setToggleGroup(grupoIdioma);
         toggleENG.setToggleGroup(grupoIdioma);
         toggleESP.setSelected(true);
+
+        grupoIdioma.selectedToggleProperty().addListener((observador, anterior, nuevo) -> {
+            if (nuevo == null) {
+                anterior.setSelected(true);
+            }
+        });
 
         HBox contenedorIdiomas = new HBox(15, toggleESP, toggleENG);
         contenedorIdiomas.setAlignment(Pos.CENTER);
@@ -130,9 +135,10 @@ public class BetweenleGUI extends Application {
         ToggleButton modoFacil = new ToggleButton("Fácil (5)");
         ToggleButton modoMedio = new ToggleButton("Intermedio (6)");
         ToggleButton modoDificil = new ToggleButton("Difícil (n)");
-        modoFacil.setStyle(estiloToggle);
-        modoMedio.setStyle(estiloToggle);
-        modoDificil.setStyle(estiloToggle);
+
+        configurarToggle(modoFacil, "#E0E0E0", "#CCCCCC", "#4CAF50");
+        configurarToggle(modoMedio, "#E0E0E0", "#CCCCCC", "#FF9800");
+        configurarToggle(modoDificil, "#E0E0E0", "#CCCCCC", "#f54242");
 
         ToggleGroup grupoDificultad = new ToggleGroup();
         modoFacil.setToggleGroup(grupoDificultad);
@@ -148,6 +154,12 @@ public class BetweenleGUI extends Application {
         Spinner<Integer> spinnerLetras = new Spinner<>(7, 15, 7);
         spinnerLetras.setPrefWidth(100);
         spinnerLetras.setDisable(true);
+
+        grupoDificultad.selectedToggleProperty().addListener((observador, anterior, nuevo) -> {
+            if (nuevo == null) {
+                anterior.setSelected(true);
+            }
+        });
 
         grupoDificultad.selectedToggleProperty().addListener((observable, viejoToggle, nuevoToggle) -> {
             if (nuevoToggle == modoDificil) {
@@ -166,15 +178,22 @@ public class BetweenleGUI extends Application {
         ToggleButton intentos_10 = new ToggleButton("10");
         ToggleButton intentos_12 = new ToggleButton("12");
         ToggleButton intentos_14 = new ToggleButton("14");
-        intentos_10.setStyle(estiloToggle);
-        intentos_12.setStyle(estiloToggle);
-        intentos_14.setStyle(estiloToggle);
+
+        configurarToggle(intentos_10, "#E0E0E0", "#CCCCCC", "#42adf5");
+        configurarToggle(intentos_12, "#E0E0E0", "#CCCCCC", "#42adf5");
+        configurarToggle(intentos_14, "#E0E0E0", "#CCCCCC", "#42adf5");
 
         ToggleGroup grupoIntentos = new ToggleGroup();
         intentos_10.setToggleGroup(grupoIntentos);
         intentos_12.setToggleGroup(grupoIntentos);
         intentos_14.setToggleGroup(grupoIntentos);
         intentos_10.setSelected(true);
+
+        grupoIntentos.selectedToggleProperty().addListener((observador, anterior, nuevo) -> {
+            if (nuevo == null) {
+                anterior.setSelected(true);
+            }
+        });
 
         HBox cajaIntentos = new HBox(15, intentos_10, intentos_12, intentos_14);
         cajaIntentos.setAlignment(Pos.CENTER);
@@ -188,15 +207,17 @@ public class BetweenleGUI extends Application {
         contenedorOpciones.setAlignment(Pos.CENTER);
         contenedorOpciones.setPadding(new Insets(20));
 
-        Button comenzar = new Button("COMENZAR");
+        SoundButton comenzar = new SoundButton("COMENZAR",
+                "src/main/java/uabc/david/practica6poo2026/Menu_Open.wav",
+                "#4CAF50", "#358f38", "#ffffff");
         comenzar.setPrefWidth(220);
         comenzar.setPrefHeight(40);
-        comenzar.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 5;");
 
-        Button regresar = new Button("VOLVER");
+        SoundButton regresar = new SoundButton("VOLVER",
+                "src/main/java/uabc/david/practica6poo2026/Menu_Close.wav",
+                "#ff641c", "#d45920", "#ffffff");
         regresar.setPrefWidth(220);
         regresar.setPrefHeight(40);
-        regresar.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-background-color: #f57242; -fx-text-fill: white; -fx-background-radius: 5;");
         regresar.setOnAction(e -> {
             mostrarMenuPrincipal();
         });
@@ -699,6 +720,50 @@ public class BetweenleGUI extends Application {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
+    }
+
+    /**
+     * Configura los estados dinámicos para el ToggleButton.
+     */
+    private void configurarToggle(ToggleButton boton, String colorNormal, String colorHover, String colorSeleccionado) {
+        boton.setCursor(Cursor.HAND);
+
+        // Aplica el color inicial basado en su estado actual.
+        actualizarColorToggle(boton, colorNormal, colorHover, colorSeleccionado);
+
+        // Reacciona cuando el botón se selecciona o deselecciona.
+        boton.selectedProperty().addListener((observador, valorViejo, valorNuevo) -> {
+            actualizarColorToggle(boton, colorNormal, colorHover, colorSeleccionado);
+        });
+
+        // Reacciona cuando el mouse pasa por encima.
+        boton.hoverProperty().addListener((observador, valorViejo, valorNuevo) -> {
+            actualizarColorToggle(boton, colorNormal, colorHover, colorSeleccionado);
+        });
+    }
+
+    /**
+     * Aplica el CSS correspondiente según el estado actual del botón.
+     */
+    private void actualizarColorToggle(ToggleButton boton, String colorNormal, String colorHover, String colorSeleccionado) {
+        String colorFondo;
+        String colorTexto;
+
+        if (boton.isSelected()) {
+            colorFondo = colorSeleccionado;
+            colorTexto = "white";
+        } else if (boton.isHover()) {
+            colorFondo = colorHover;
+            colorTexto = "#333333";
+        } else {
+            colorFondo = colorNormal;
+            colorTexto = "#333333";
+        }
+
+        boton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-min-width: 110px; -fx-min-height: 35px; " +
+                "-fx-background-color: " + colorFondo + "; " +
+                "-fx-text-fill: " + colorTexto + "; " +
+                "-fx-background-radius: 5;");
     }
 
     public static void main(String[] args) {
