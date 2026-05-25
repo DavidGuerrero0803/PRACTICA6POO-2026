@@ -70,6 +70,7 @@ public class BetweenleGUI extends Application {
      * Crea y muestra la pantalla inicial con los botones de JUGAR y SALIR.
      */
     private void mostrarMenuPrincipal() {
+        // Se reconstruye el encabezado principal para el menú por si se regresa.
         titulo = new Label("BETWEENLE");
         titulo.setStyle("-fx-font-weight: bold; -fx-font-size: 50px;");
 
@@ -85,21 +86,27 @@ public class BetweenleGUI extends Application {
         contenedorSuperior.setAlignment(Pos.CENTER);
         contenedorPrincipal.setTop(contenedorSuperior);
 
+        // Uso de la subclase ImageButton para crear el botón de JUGAR.
         ImageButton jugar = new ImageButton("src/main/java/uabc/david/practica6poo2026/boton_jugar.png", 400, 50);
         jugar.setOnAction(e -> {
+            // Al presionarlo, mostrará al jugador el menú de configuración de partida.
             mostrarConfiguracion();
         });
 
+        // Uso de la subclase ImageButton para crear el botón de SALIR.
         ImageButton salir = new ImageButton("src/main/java/uabc/david/practica6poo2026/boton_salir.png", 400, 50);
         salir.setOnAction(e -> {
+            // Al presionarlo, el programa se cerrará.
             Platform.exit();
         });
 
+        // Contenedor para alinear los botones principales en el centro de la pantalla.
         VBox contenedorBotones = new VBox(20, jugar, salir);
         contenedorBotones.setAlignment(Pos.CENTER);
-
         contenedorPrincipal.setBottom(null);
         contenedorPrincipal.setCenter(contenedorBotones);
+
+        // En caso de volver del juego, se restaura el tamaño de la ventana del menú.
         if (stagePrincipal != null) {
             stagePrincipal.setWidth(550);
             stagePrincipal.setHeight(700);
@@ -114,29 +121,35 @@ public class BetweenleGUI extends Application {
     private void mostrarConfiguracion() {
         String estiloEtiqueta = "-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;";
 
+        // Configuración del idioma de acuerdo a lo que elija el usuario con el ToggleButton.
         Label idioma = new Label("Selecciona el idioma del diccionario");
         idioma.setStyle(estiloEtiqueta);
 
         ToggleButton toggleESP = new ToggleButton("Español");
         ToggleButton toggleENG = new ToggleButton("Inglés");
 
+        // Si el cursor pasa o selecciona uno de los botones, se pintará de ciertos colores.
         configurarToggle(toggleESP, "#E0E0E0", "#CCCCCC", "#42adf5");
         configurarToggle(toggleENG, "#E0E0E0", "#CCCCCC", "#42adf5");
 
+        // Los ToggleButton se guardan dentro de su grupo respectivo.
         ToggleGroup grupoIdioma = new ToggleGroup();
         toggleESP.setToggleGroup(grupoIdioma);
         toggleENG.setToggleGroup(grupoIdioma);
         toggleESP.setSelected(true);
 
+        // Previene que ningún botón se quede sin seleccionar.
         grupoIdioma.selectedToggleProperty().addListener((observador, anterior, nuevo) -> {
             if (nuevo == null) {
                 anterior.setSelected(true);
             }
         });
 
+        // Guarda los botones de idiomas dentro de su contenedor horizontal.
         HBox contenedorIdiomas = new HBox(15, toggleESP, toggleENG);
         contenedorIdiomas.setAlignment(Pos.CENTER);
 
+        // Configuración de la dificultad de acuerdo a lo que elija el usuario con el ToggleButton.
         Label dificultad = new Label("Selecciona la dificultad:");
         dificultad.setStyle(estiloEtiqueta);
 
@@ -144,6 +157,7 @@ public class BetweenleGUI extends Application {
         ToggleButton modoMedio = new ToggleButton("Intermedio (6)");
         ToggleButton modoDificil = new ToggleButton("Difícil (n)");
 
+        // De acuerdo a lo que elija de modo, el color de cada botón seleccionado será diferente.
         configurarToggle(modoFacil, "#E0E0E0", "#CCCCCC", "#4CAF50");
         configurarToggle(modoMedio, "#E0E0E0", "#CCCCCC", "#FF9800");
         configurarToggle(modoDificil, "#E0E0E0", "#CCCCCC", "#f54242");
@@ -154,9 +168,11 @@ public class BetweenleGUI extends Application {
         modoDificil.setToggleGroup(grupoDificultad);
         modoFacil.setSelected(true);
 
+        // Guarda los botones de dificultad dentro de su contenedor.
         HBox contenedorDificultades = new HBox(15, modoFacil, modoMedio, modoDificil);
         contenedorDificultades.setAlignment(Pos.CENTER);
 
+        // Si el jugador elige "Difícil", se mostrará un Spinner que le deja elegir entre 7 y 15 (letras).
         Label letras = new Label("Letras en difícil (7-15)");
         letras.setStyle(estiloEtiqueta);
         Spinner<Integer> spinnerLetras = new Spinner<>(7, 15, 7);
@@ -169,6 +185,7 @@ public class BetweenleGUI extends Application {
             }
         });
 
+        // Activa el spinner únicamente si se seleccionó la dificultad difícil.
         grupoDificultad.selectedToggleProperty().addListener((observable, viejoToggle, nuevoToggle) -> {
             if (nuevoToggle == modoDificil) {
                 spinnerLetras.setDisable(false);
@@ -177,9 +194,11 @@ public class BetweenleGUI extends Application {
             }
         });
 
+        // Guarda el Spinner dentro de su propio contenedor.
         VBox contenedorSpinner = new VBox(5, letras, spinnerLetras);
         contenedorSpinner.setAlignment(Pos.CENTER);
 
+        // Configuración de la dificultad de acuerdo a lo que elija el usuario con el ToggleButton.
         Label intentos = new Label("Selecciona el número de intentos");
         intentos.setStyle(estiloEtiqueta);
 
@@ -203,40 +222,48 @@ public class BetweenleGUI extends Application {
             }
         });
 
-        HBox cajaIntentos = new HBox(15, intentos_10, intentos_12, intentos_14);
-        cajaIntentos.setAlignment(Pos.CENTER);
+        // Guarda los botones de cantidad de intentos dentro de su contenedor.
+        HBox contenedorIntentos = new HBox(15, intentos_10, intentos_12, intentos_14);
+        contenedorIntentos.setAlignment(Pos.CENTER);
 
+        // Almacena todos los contenedores previos a un contenedor vertical.
         VBox contenedorOpciones = new VBox(20,
                 idioma, contenedorIdiomas,
                 dificultad, contenedorDificultades,
                 contenedorSpinner,
-                intentos, cajaIntentos
+                intentos, contenedorIntentos
         );
         contenedorOpciones.setAlignment(Pos.CENTER);
         contenedorOpciones.setPadding(new Insets(20));
 
+        // Uso de la subclase SoundButton para emitir un sonido de "abrir" para empezar.
         SoundButton comenzar = new SoundButton("COMENZAR",
                 "src/main/java/uabc/david/practica6poo2026/Menu_Open.wav",
                 "#4CAF50", "#358f38", "#ffffff");
         comenzar.setPrefWidth(220);
         comenzar.setPrefHeight(40);
 
+        // Uso de la subclase SoundButton para emitir un sonido de "cerrar" para volver.
         SoundButton regresar = new SoundButton("VOLVER",
                 "src/main/java/uabc/david/practica6poo2026/Menu_Close.wav",
                 "#ff641c", "#d45920", "#ffffff");
         regresar.setPrefWidth(220);
         regresar.setPrefHeight(40);
         regresar.setOnAction(e -> {
+            // En caso de elegir regresar, mostrará de nuevo el menú principal.
             mostrarMenuPrincipal();
         });
 
+        // Guarda ambos botones dentro del contenedor.
         HBox contenedorAcciones = new HBox(30, regresar, comenzar);
         contenedorAcciones.setAlignment(Pos.CENTER);
         contenedorAcciones.setPadding(new Insets(20, 0, 0, 0));
 
+        // Este último VBox almacena todos los componentes anteriormente creados.
         VBox contenedorCompleto = new VBox(10, contenedorOpciones, contenedorAcciones);
         contenedorCompleto.setAlignment(Pos.CENTER);
 
+        // Captura los valores escogidos e inicializa el juego.
         comenzar.setOnAction(e -> {
             ToggleButton idiomaSeleccionado = (ToggleButton) grupoIdioma.getSelectedToggle();
             String idiomaElegido = (idiomaSeleccionado != null && idiomaSeleccionado.getText().equals("Español")) ? "español" : "inglés";
@@ -249,6 +276,7 @@ public class BetweenleGUI extends Application {
             String dificultadElegida = "fácil";
             int longitudLetras = 5;
 
+            // Se ajusta la longitud de la palabra secreta basado en la dificultad.
             if (modoSeleccionado != null) {
                 if (modoSeleccionado == modoMedio) {
                     dificultadElegida = "intermedio";
@@ -261,6 +289,7 @@ public class BetweenleGUI extends Application {
             juego = new Betweenle(longitudLetras);
             boolean iniciado = juego.iniciarPartida(idiomaElegido, dificultadElegida, intentosElegidos);
 
+            // Verifica que el diccionario pueda usarse para poder mostrar la interfaz del juego.
             if (iniciado) {
                 Stage stageActual = (Stage) contenedorPrincipal.getScene().getWindow();
                 stageActual.setWidth(800);
@@ -269,6 +298,7 @@ public class BetweenleGUI extends Application {
 
                 mostrarInterfazJuego();
             } else {
+                // En caso de haber un error, lanzará un Alert avisando al respecto.
                 mostrarAlerta("Error", "No se encontraron palabras de " + longitudLetras +
                         " letras en el diccionario", Alert.AlertType.ERROR);
             }
@@ -300,14 +330,17 @@ public class BetweenleGUI extends Application {
         intentosRestantes = new Label((enIngles ? "GUESS 0 / " : "INTENTO 0 / ") + juego.getRondaActual().getIntentosRestantes());
         intentosRestantes.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
+        // Uso de ImageButton para crear un botón con el icono del Betweenle para volver al menú.
         ImageButton menu = new ImageButton("src/main/java/uabc/david/practica6poo2026/casa_menu.png", 50, 50);
         menu.setFocusTraversable(false);
         menu.setOnAction(e -> mostrarMenuPrincipal());
 
+        // Uso de ImageButton para crear un botón con forma de bombilla para solicitar pistas.
         ImageButton pistas = new ImageButton("src/main/java/uabc/david/practica6poo2026/idea_pista.png", 50, 50);
         pistas.setFocusTraversable(false);
         pistas.setOnAction(e -> manejarPista());
 
+        // Panel que distribuye los botones de imágenes y la etiqueta de intentos.
         BorderPane barraEstado = new BorderPane();
         barraEstado.setLeft(menu);
         barraEstado.setCenter(intentosRestantes);
@@ -329,6 +362,7 @@ public class BetweenleGUI extends Application {
         espaciadorInvisible.setPrefWidth(35);
         contenedorIntermedio.getChildren().add(espaciadorInvisible);
 
+        // Genera las etiquetas visuales (casillas) según la longitud de la palabra.
         casillasEntrada = new Label[longitud];
         for (int i = 0; i < longitud; i++) {
             Label casilla = new Label("");
@@ -374,7 +408,7 @@ public class BetweenleGUI extends Application {
         interfazCompleta.setRight(null);
 
         contenedorPrincipal.setCenter(interfazCompleta);
-
+        // Fuerza el foco hacia la escena para capturar lo que escriba del teclado.
         Platform.runLater(() -> {
             contenedorPrincipal.getScene().setOnKeyPressed(this::manejarTeclado);
             contenedorPrincipal.requestFocus();
@@ -410,6 +444,7 @@ public class BetweenleGUI extends Application {
                 }
                 break;
             case BACK_SPACE:
+                // Retrocede el índice de la casilla y la deja vacía.
                 if (letraIngresada > 0) {
                     letraIngresada--;
                     casillasEntrada[letraIngresada].setText("");
@@ -419,6 +454,7 @@ public class BetweenleGUI extends Application {
                 break;
             default:
                 String letra = event.getText().toUpperCase();
+                // Verifica que el caracter ingresado sea válido y que aún queden casillas libres.
                 if (letra.matches("[A-ZÑ]") && letraIngresada < longitud) {
                     casillasEntrada[letraIngresada].setText(letra);
                     casillasEntrada[letraIngresada].setStyle("-fx-border-width: 2; " +
@@ -450,6 +486,9 @@ public class BetweenleGUI extends Application {
         }
     }
 
+    /**
+     * Actualiza el teclado visual, apagando las letras que alfabéticamente, ya no se pueden usar.
+     */
     private void actualizarAlfabeto() {
         if (juegoBloqueado) {
             return;
@@ -457,6 +496,7 @@ public class BetweenleGUI extends Application {
 
         ProcesadorRonda ronda = juego.getRondaActual();
 
+        // Se obtienen los límites y formamos el prefijo actual escrito.
         String limiteInferior = ronda.getLimiteInferior().toUpperCase();
         String limiteSuperior = ronda.getLimiteSuperior().toUpperCase();
 
@@ -512,6 +552,7 @@ public class BetweenleGUI extends Application {
             }
         }
 
+        // Itera sobre las letras y las apaga o prende.
         for (Node nodo : panelTeclado.getChildren()) {
             if (nodo instanceof Label) {
                 Label etiquetaLetra = (Label) nodo;
@@ -531,6 +572,9 @@ public class BetweenleGUI extends Application {
         }
     }
 
+    /**
+     * Mueve la casilla seleccionada simulando el movimiento de un cursor.
+     */
     private void mostrarCursor() {
         if (juegoBloqueado) {
             return;
@@ -568,6 +612,7 @@ public class BetweenleGUI extends Application {
 
         String resultado = juego.procesarIntento(intento);
 
+        // Dentro del switch-case se evalúa la respuesta dada por el jugador (palabra).
         switch (resultado) {
             case "longitud":
                 break;
@@ -593,9 +638,12 @@ public class BetweenleGUI extends Application {
             case "despues":
                 limpiarCasillas();
                 actualizarInterfaz();
+
+                // Si al final de la partida el contador de intentos bajó a 0, se acaba la partida.
                 if (juego.getRondaActual().getIntentosRestantes() <= 0) {
                     juegoBloqueado = true;
                     for (Label casilla : casillasEntrada) {
+                        // Todas las casillas de ingreso se pintan de blanco.
                         casilla.setTextFill(Color.WHITE);
                         casilla.setStyle("-fx-border-color: #ffffff; -fx-border-width: 2; -fx-background-color: #ffffff; " +
                                 "-fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; " +
@@ -607,6 +655,7 @@ public class BetweenleGUI extends Application {
             case "correcto":
                 actualizarInterfaz();
                 juegoBloqueado = true;
+                // Si el jugador adivina la palabra, las casillas se pintan de verde.
                 for (Label casilla : casillasEntrada) {
                     casilla.setTextFill(Color.WHITE);
                     casilla.setStyle("-fx-border-color: #4CAF50; -fx-border-width: 2; -fx-background-color: #4CAF50; " +
@@ -623,6 +672,9 @@ public class BetweenleGUI extends Application {
         }
     }
 
+    /**
+     * Vacía el contenido de todas las casillas de entrada y reinicia el índice para poder escribir de nuevo.
+     */
     private void limpiarCasillas() {
         letraIngresada = 0;
         for (Label casilla : casillasEntrada) {
@@ -639,15 +691,14 @@ public class BetweenleGUI extends Application {
         ProcesadorRonda ronda = juego.getRondaActual();
         boolean sinIntentos = ronda.getHistorialIntentos().isEmpty();
         int longitud = ronda.getLongitudPalabra();
-
         int totalIntentos = ronda.getHistorialIntentos().size() + ronda.getIntentosRestantes();
-
         int intentoActual = ronda.getHistorialIntentos().size() + 1;
 
         if (intentoActual > totalIntentos) {
             intentoActual = totalIntentos;
         }
 
+        // Muestra el número de intentos que ha realizado de manera ascendente.
         intentosRestantes.setText((enIngles ? "GUESS " : "INTENTO ") + intentoActual + " / " + totalIntentos);
 
         String etiquetaSuperior = sinIntentos ? "?" : String.valueOf(ronda.getProximidadSuperior());
@@ -666,6 +717,13 @@ public class BetweenleGUI extends Application {
         actualizarAlfabeto();
     }
 
+    /**
+     * Dibuja las filas de casillas de los límites superior e inferior.
+     * @param contenedorLimites El contenedor de los caracteres de los límites.
+     * @param palabra La palabra dividida en casillas dentro de los límites.
+     * @param proximidad Etiqueta de las aproximaciones.
+     * @param colorHex Color que tendrán las casillas.
+     */
     private void dibujarFilaLimite(HBox contenedorLimites, String palabra, String proximidad, String colorHex) {
         contenedorLimites.getChildren().clear();
 
@@ -682,6 +740,9 @@ public class BetweenleGUI extends Application {
         }
     }
 
+    /**
+     * Genera los botones que conforman el teclado dinámico inferior.
+     */
     private void crearAbecedario() {
         panelTeclado.getChildren().clear();
         String alfabeto = ALFABETO;
