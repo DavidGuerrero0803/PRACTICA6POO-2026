@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Cursor;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.Node;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -381,7 +382,7 @@ public class BetweenleGUI extends Application {
 
         Label tituloHistorial = new Label(enIngles ? "USED WORDS" : "PALABRAS UTILIZADAS");
         tituloHistorial.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #555555;");
-        tituloHistorial.setPadding(new Insets(20, 0, 0, 0));
+        tituloHistorial.setPadding(new Insets(5, 0, 0, 0));
 
         historialPalabras = new ListView<>();
         historialPalabras.setPrefHeight(60);
@@ -397,9 +398,21 @@ public class BetweenleGUI extends Application {
         panelTeclado.setMaxWidth(550);
         crearAbecedario();
 
-        VBox componentesInferiores = new VBox(15, panelTeclado, contenedorHistorialAbajo);
+        // Uso de la subclase SoundButon para tener un botón que al dar clic
+        // hará la función del Enter del teclado, haciendo un sonido de confirmación.
+        SoundButton ingresar = new SoundButton(enIngles ? "ENTER" : "INGRESAR",
+                "src/main/java/uabc/david/practica6poo2026/Research_0.wav",
+                "#a9aaab", "#8c8c8c", "#ffffff");
+        // Se simula la pulsación de la tecla ENTER.
+        ingresar.setOnAction(e -> {
+            KeyEvent enter = new KeyEvent(KeyEvent.KEY_PRESSED, "", "", KeyCode.ENTER,
+                    false, false, false, false);
+            manejarTeclado(enter);
+        });
+
+        VBox componentesInferiores = new VBox(15, panelTeclado, ingresar, contenedorHistorialAbajo);
         componentesInferiores.setAlignment(Pos.CENTER);
-        componentesInferiores.setPadding(new Insets(0, 0, 40, 0));
+        componentesInferiores.setPadding(new Insets(20, 0, 20, 0));
 
         BorderPane interfazCompleta = new BorderPane();
         interfazCompleta.setTop(barraEstado);
