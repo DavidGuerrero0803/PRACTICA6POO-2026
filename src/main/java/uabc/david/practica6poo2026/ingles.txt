@@ -3508,9 +3508,6 @@ framework
 framing
 france
 franchise
-francis
-francisco
-frank
 frankfurt
 fraud
 free
@@ -5013,7 +5010,6 @@ logo
 logos
 logs
 lol
-lolita
 london
 lone
 lonely
@@ -7303,12 +7299,6 @@ road
 roads
 roast
 rob
-robbie
-robert
-roberts
-robertson
-robin
-robinson
 robot
 robots
 robust
@@ -7318,8 +7308,6 @@ rocket
 rocks
 rocky
 rod
-roger
-rogers
 roland
 role
 roles
