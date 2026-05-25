@@ -15,6 +15,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * Esta clase provee la interfaz de usuario gráfica (GUI) para el juego Betweenle.
  * Gestiona los menús, captura las entradas del teclado y actualiza la vista de los resultados.
@@ -334,18 +337,32 @@ public class BetweenleGUI extends Application {
         // Uso de ImageButton para crear un botón con el icono del Betweenle para volver al menú.
         ImageButton menu = new ImageButton("src/main/java/uabc/david/practica6poo2026/casa_menu.png", 50, 50);
         menu.setFocusTraversable(false);
-        menu.setOnAction(e -> mostrarMenuPrincipal());
+        menu.setOnAction(e -> {
+            mostrarMenuPrincipal();
+        });
 
         // Uso de ImageButton para crear un botón con forma de bombilla para solicitar pistas.
         ImageButton pistas = new ImageButton("src/main/java/uabc/david/practica6poo2026/idea_pista.png", 50, 50);
         pistas.setFocusTraversable(false);
-        pistas.setOnAction(e -> manejarPista());
+        pistas.setOnAction(e -> {
+            manejarPista();
+        });
+
+        // Uso de ImageButton para crear un botón con forma de estadística para mostrar eso.
+        ImageButton estadisticas = new ImageButton("src/main/java/uabc/david/practica6poo2026/stats_estadisticas.png", 50, 50);
+        estadisticas.setFocusTraversable(false);
+        estadisticas.setOnAction(e -> {
+            mostrarEstadisticas();
+        });
+
+        HBox contenedorDerecho = new HBox(10, pistas, estadisticas);
+        contenedorDerecho.setAlignment(Pos.CENTER_RIGHT);
 
         // Panel que distribuye los botones de imágenes y la etiqueta de intentos.
         BorderPane barraEstado = new BorderPane();
         barraEstado.setLeft(menu);
         barraEstado.setCenter(intentosRestantes);
-        barraEstado.setRight(pistas);
+        barraEstado.setRight(contenedorDerecho);
 
         barraEstado.setPadding(new Insets(10, 160, 20, 160));
 
@@ -873,6 +890,32 @@ public class BetweenleGUI extends Application {
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
+    }
+
+    /**
+     * Muestra las estadísticas generales de la partida actual.
+     */
+    private void mostrarEstadisticas() {
+        if (juego == null || juego.getRondaActual() == null) {
+            return;
+        }
+
+        int palabrasUsadas = juego.getRondaActual().getHistorialIntentos().size();
+        int totalIntentos = palabrasUsadas + juego.getRondaActual().getIntentosRestantes();
+
+        ArrayList<String> listaLetras = new ArrayList<>(juego.getRondaActual().getLetrasUsadas());
+        Collections.sort(listaLetras);
+
+        String letrasFormateadas = listaLetras.isEmpty() ?
+                (enIngles ? "None yet" : "Ninguna aún") :
+                String.join(", ", listaLetras);
+
+        String tituloAlert = enIngles ? "GAME STATISTICS" : "ESTADÍSTICAS DEL JUEGO";
+        String mensaje = (enIngles ? "Total attempts allowed: " : "Intentos totales permitidos: ") + totalIntentos + "\n\n" +
+                (enIngles ? "Words used so far: " : "Palabras usadas hasta ahora: ") + palabrasUsadas + "\n\n" +
+                (enIngles ? "Letters used: " : "Letras usadas: ") + letrasFormateadas;
+
+        mostrarAlerta(tituloAlert, mensaje, Alert.AlertType.INFORMATION);
     }
 
     /**
