@@ -14,7 +14,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class BetweenleGUI extends Application {
-
     private BorderPane contenedorPrincipal;
     private Betweenle juego;
     private Label intentosRestantes;
@@ -29,10 +28,12 @@ public class BetweenleGUI extends Application {
     private HBox contenedorIntermedio;
     private HBox contenedorInferior;
     private boolean juegoBloqueado = false;
-    private final String ALFABETO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+    private final String ALFABETO = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private Stage stagePrincipal;
 
     @Override
     public void start(Stage stage) {
+        this.stagePrincipal = stage;
         contenedorPrincipal = new BorderPane();
 
         titulo = new Label("BETWEENLE");
@@ -56,10 +57,26 @@ public class BetweenleGUI extends Application {
     }
 
     private void mostrarMenuPrincipal() {
+        titulo = new Label("BETWEENLE");
+        titulo.setStyle("-fx-font-weight: bold; -fx-font-size: 50px;");
+
+        Label subtitulo = new Label("Adivina la palabra secreta escondida entre otras palabras");
+        subtitulo.setStyle("-fx-font-weight: bold; -fx-font-size: 15px;");
+        subtitulo.setTextFill(Color.GRAY);
+
+        VBox contenedorTitulo = new VBox(titulo, subtitulo);
+        contenedorTitulo.setAlignment(Pos.TOP_CENTER);
+        contenedorTitulo.setPadding(new Insets(20, 0, 20, 0));
+
+        contenedorSuperior = new HBox(contenedorTitulo);
+        contenedorSuperior.setAlignment(Pos.CENTER);
+        contenedorPrincipal.setTop(contenedorSuperior);
+
         Button jugar = new Button("JUGAR");
         jugar.setPrefWidth(400);
         jugar.setPrefHeight(50);
-        jugar.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-background-color: #42adf5; -fx-text-fill: white; -fx-background-radius: 5;");
+        jugar.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-background-color: #42adf5; " +
+                "-fx-text-fill: white; -fx-background-radius: 5;");
 
         jugar.setOnAction(e -> {
             mostrarConfiguracion();
@@ -68,16 +85,23 @@ public class BetweenleGUI extends Application {
         Button salir = new Button("SALIR");
         salir.setPrefWidth(400);
         salir.setPrefHeight(50);
-        salir.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-background-color: #f54242; -fx-text-fill: white; -fx-background-radius: 5;");
+        salir.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-background-color: #f54242; " +
+                "-fx-text-fill: white; -fx-background-radius: 5;");
 
         salir.setOnAction(e -> {
-
+            Platform.exit();
         });
 
         VBox contenedorBotones = new VBox(20, jugar, salir);
         contenedorBotones.setAlignment(Pos.CENTER);
 
+        contenedorPrincipal.setBottom(null);
         contenedorPrincipal.setCenter(contenedorBotones);
+        if (stagePrincipal != null) {
+            stagePrincipal.setWidth(550);
+            stagePrincipal.setHeight(700);
+            stagePrincipal.centerOnScreen();
+        }
     }
 
     private void mostrarConfiguracion() {
@@ -239,8 +263,8 @@ public class BetweenleGUI extends Application {
         contenedorSuperior.setAlignment(Pos.CENTER);
         contenedorPrincipal.setTop(contenedorSuperior);
 
-        intentosRestantes = new Label("Intentos: 0/" + juego.getRondaActual().getIntentosRestantes());
-        intentosRestantes.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+        intentosRestantes = new Label("INTENTO 0 / " + juego.getRondaActual().getIntentosRestantes());
+        intentosRestantes.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
         HBox contenedorIntentos = new HBox(intentosRestantes);
         contenedorIntentos.setAlignment(Pos.CENTER);
@@ -285,7 +309,7 @@ public class BetweenleGUI extends Application {
         VBox contenedorHistorialAbajo = new VBox(5, tituloHistorial, historialPalabras);
         contenedorHistorialAbajo.setAlignment(Pos.CENTER);
 
-        panelTeclado = new FlowPane(6, 6);
+        panelTeclado = new FlowPane(2, 2);
         panelTeclado.setAlignment(Pos.CENTER);
         panelTeclado.setMaxWidth(550);
         crearAbecedario();
@@ -324,6 +348,12 @@ public class BetweenleGUI extends Application {
 
         actualizarInterfaz();
         mostrarCursor();
+
+        if (stagePrincipal != null) {
+            stagePrincipal.setWidth(850);
+            stagePrincipal.setHeight(700);
+            stagePrincipal.centerOnScreen();
+        }
     }
 
     private void manejarTeclado(KeyEvent event) {
@@ -555,7 +585,7 @@ public class BetweenleGUI extends Application {
             intentoActual = totalIntentos;
         }
 
-        intentosRestantes.setText("Intentos: " + intentoActual + "/" + totalIntentos);
+        intentosRestantes.setText("INTENTO " + intentoActual + " / " + totalIntentos);
 
         String etiquetaSuperior = sinIntentos ? "?" : String.valueOf(ronda.getProximidadSuperior());
         String palabraArriba = sinIntentos ? "A".repeat(longitud) : ronda.getLimiteSuperior();
@@ -591,7 +621,7 @@ public class BetweenleGUI extends Application {
 
     private void crearAbecedario() {
         panelTeclado.getChildren().clear();
-        String alfabeto = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+        String alfabeto = ALFABETO;
         for (char c : alfabeto.toCharArray()) {
             Label letrasAbecedario = new Label(String.valueOf(c));
             letrasAbecedario.setStyle("-fx-background-color: #E0E0E0; -fx-background-radius: 50em; -fx-font-weight: bold; " +
