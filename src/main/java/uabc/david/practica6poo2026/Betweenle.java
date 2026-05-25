@@ -213,13 +213,15 @@ public class Betweenle {
             }
         }
 
+        boolean esIngles = this.diccionario != null && this.diccionario.getIdioma().equals("inglés");
+
         // Pista encargada de mover el límite superior un 1%.
         if (opcionPista == 1) {
             String nuevoLimite = rondaActual.recorrerPalabraArriba();
             if (nuevoLimite.equals("demasiado cerca")) {
                 return "demasiado cerca";
             }
-            return "El límite superior ahora es: " + nuevoLimite.toUpperCase();
+            return (esIngles ? "The upper limit is now: " : "El límite superior ahora es: ") + nuevoLimite.toUpperCase();
         }
 
         // Pista encargada de mover el límite inferior un 1%.
@@ -228,13 +230,13 @@ public class Betweenle {
             if (nuevoLimite.equals("demasiado cerca")) {
                 return "demasiado cerca";
             }
-            return "El límite inferior ahora es: " + nuevoLimite.toUpperCase();
+            return (esIngles ? "The lower limit is now: " : "El límite inferior ahora es: ") + nuevoLimite.toUpperCase();
         }
 
         // Pista encargada de mostrar la primera letra de la palabra secreta.
         if (opcionPista == 3) {
             String letra = rondaActual.pistaLetraInicial();
-            return "La palabra empieza con la letra: " + letra.toUpperCase();
+            return (esIngles ? "The word starts with the letter: " : "La palabra empieza con la letra: ") + letra.toUpperCase();
         }
 
         return "opción inválida";

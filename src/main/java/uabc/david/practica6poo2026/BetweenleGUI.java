@@ -20,8 +20,6 @@ public class BetweenleGUI extends Application {
     private Label intentosRestantes;
     private ListView<String> historialPalabras;
     private FlowPane panelTeclado;
-    private Button pistas;
-    private Button menu;
     private Label[] casillasEntrada;
     private Label titulo;
     private int letraIngresada = 0;
@@ -30,6 +28,7 @@ public class BetweenleGUI extends Application {
     private HBox contenedorInferior;
     private boolean juegoBloqueado = false;
     private final String ALFABETO = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private boolean enIngles = false;
     private Stage stagePrincipal;
 
     @Override
@@ -233,6 +232,7 @@ public class BetweenleGUI extends Application {
         comenzar.setOnAction(e -> {
             ToggleButton idiomaSeleccionado = (ToggleButton) grupoIdioma.getSelectedToggle();
             String idiomaElegido = (idiomaSeleccionado != null && idiomaSeleccionado.getText().equals("Español")) ? "español" : "inglés";
+            enIngles = idiomaElegido.equals("inglés");
 
             ToggleButton intentoSeleccionado = (ToggleButton) grupoIntentos.getSelectedToggle();
             int intentosElegidos = (intentoSeleccionado != null) ? Integer.parseInt(intentoSeleccionado.getText()) : 14;
@@ -285,7 +285,7 @@ public class BetweenleGUI extends Application {
         contenedorSuperior.setAlignment(Pos.CENTER);
         contenedorPrincipal.setTop(contenedorSuperior);
 
-        intentosRestantes = new Label("INTENTO 0 / " + juego.getRondaActual().getIntentosRestantes());
+        intentosRestantes = new Label((enIngles ? "GUESS 0 / " : "INTENTO 0 / ") + juego.getRondaActual().getIntentosRestantes());
         intentosRestantes.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
         ImageButton menu = new ImageButton("src/main/java/uabc/david/practica6poo2026/casa_menu.png", 50, 50);
@@ -333,7 +333,7 @@ public class BetweenleGUI extends Application {
         VBox componentesCentrales = new VBox(8, contenedorSuperior, contenedorIntermedio, contenedorInferior);
         componentesCentrales.setAlignment(Pos.CENTER);
 
-        Label tituloHistorial = new Label("PALABRAS UTILIZADAS");
+        Label tituloHistorial = new Label(enIngles ? "USED WORDS" : "PALABRAS UTILIZADAS");
         tituloHistorial.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #555555;");
         tituloHistorial.setPadding(new Insets(20, 0, 0, 0));
 
@@ -353,7 +353,7 @@ public class BetweenleGUI extends Application {
 
         VBox componentesInferiores = new VBox(15, panelTeclado, contenedorHistorialAbajo);
         componentesInferiores.setAlignment(Pos.CENTER);
-        componentesInferiores.setPadding(new Insets(0, 0, 70, 0));
+        componentesInferiores.setPadding(new Insets(0, 0, 40, 0));
 
         BorderPane interfazCompleta = new BorderPane();
         interfazCompleta.setTop(barraEstado);
@@ -389,7 +389,8 @@ public class BetweenleGUI extends Application {
                 if (letraIngresada == longitud) {
                     procesarPalabra();
                 } else {
-                    mostrarAlerta(" ", "La palabra no está en la lista.", Alert.AlertType.WARNING);
+                    mostrarAlerta(" ", enIngles ? "Word not in list" :
+                            "La palabra no está en la lista", Alert.AlertType.WARNING);
                 }
                 break;
             case BACK_SPACE:
@@ -542,11 +543,11 @@ public class BetweenleGUI extends Application {
                 String limInferior = juego.getRondaActual().getLimiteInferior().toUpperCase();
 
                 if (intento.toLowerCase().compareTo(limSuperior.toLowerCase()) <= 0) {
-                    mostrarAlerta(" ", "Ingresa una palabra alfabéticamente posterior a " + limSuperior + ".",
-                            Alert.AlertType.WARNING);
+                    mostrarAlerta(" ", enIngles ? "Enter word placed in dictionary after " + limSuperior + "." :
+                            "Ingresa una palabra alfabéticamente posterior a " + limSuperior + ".", Alert.AlertType.WARNING);
                 } else {
-                    mostrarAlerta(" ", "Ingresa una palabra alfabéticamente anterior a " + limInferior + ".",
-                            Alert.AlertType.WARNING);
+                    mostrarAlerta(" ", enIngles ? "Enter word placed in dictionary before " + limInferior + "." :
+                            "Ingresa una palabra alfabéticamente anterior a " + limInferior + ".", Alert.AlertType.WARNING);
                 }
 
                 limpiarCasillas();
@@ -607,7 +608,7 @@ public class BetweenleGUI extends Application {
             intentoActual = totalIntentos;
         }
 
-        intentosRestantes.setText("INTENTO " + intentoActual + " / " + totalIntentos);
+        intentosRestantes.setText((enIngles ? "GUESS " : "INTENTO ") + intentoActual + " / " + totalIntentos);
 
         String etiquetaSuperior = sinIntentos ? "?" : String.valueOf(ronda.getProximidadSuperior());
         String palabraArriba = sinIntentos ? "A".repeat(longitud) : ronda.getLimiteSuperior();
@@ -655,53 +656,62 @@ public class BetweenleGUI extends Application {
     private void manejarPalabraInexistente(String palabra) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle(" ");
-        alerta.setHeaderText("La palabra " + palabra.toUpperCase() + " no está en el diccionario.");
-        alerta.setContentText("¿Puedes demostrar que es una palabra válida?");
+        alerta.setHeaderText(enIngles ? "The word " + palabra.toUpperCase() + " is not in the dictionary." :
+                "La palabra " + palabra.toUpperCase() + " no está en el diccionario.");
+        alerta.setContentText(enIngles ? "Can you prove it is a valid word?" : "¿Puedes demostrar que es una palabra válida?");
 
-        ButtonType aceptarIngreso = new ButtonType("Sí, agregarla al diccionario");
-        ButtonType denegarIngreso = new ButtonType("No, escribir otra palabra", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType aceptarIngreso = new ButtonType(enIngles ? "Yes, add it to the dictionary" : "Sí, agregarla al diccionario");
+        ButtonType denegarIngreso = new ButtonType(enIngles ? "No, type another word" : "No, escribir otra palabra", ButtonBar.ButtonData.CANCEL_CLOSE);
         alerta.getButtonTypes().setAll(aceptarIngreso, denegarIngreso);
 
         alerta.showAndWait().ifPresent(tipo -> {
             if (tipo == aceptarIngreso) {
                 juego.agregarPalabraAlDiccionario(palabra);
-                mostrarAlerta(" ", "La palabra fue agregada al diccionario. Ahora puedes usarla.", Alert.AlertType.INFORMATION);
+                mostrarAlerta(" ", enIngles ? "The word was added to the dictionary. You can now use it." :
+                        "La palabra fue agregada al diccionario. Ahora puedes usarla.", Alert.AlertType.INFORMATION);
             }
         });
     }
 
     private void manejarPista() {
         if (juego.getRondaActual().pistaUtilizada()) {
-            mostrarAlerta("", "Ya usaste tu pista en esta partida.", Alert.AlertType.INFORMATION);
+            mostrarAlerta("", enIngles ? "You already used your hint in this game." : 
+                    "Ya usaste tu pista en esta partida.", Alert.AlertType.INFORMATION);
             return;
         }
 
         if (juegoBloqueado) {
-            mostrarAlerta("", "La partida acabó, ya no puedes usar pistas.", Alert.AlertType.INFORMATION);
+            mostrarAlerta("", enIngles ? "The game is over, you cannot use hints anymore." : 
+                    "La partida acabó, ya no puedes usar pistas.", Alert.AlertType.INFORMATION);
             return;
         }
 
-        ChoiceDialog<String> dialogo = new ChoiceDialog<>("1. Acercar límite superior",
-                "1. Acercar límite superior",
-                "2. Acercar límite inferior",
-                "3. Revelar letra inicial");
+        String op1 = enIngles ? "1. Move upper limit closer" : "1. Acercar límite superior";
+        String op2 = enIngles ? "2. Move lower limit closer" : "2. Acercar límite inferior";
+        String op3 = enIngles ? "3. Reveal starting letter" : "3. Revelar letra inicial";
 
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>(op1, op1, op2, op3);
         dialogo.setTitle(" ");
-        dialogo.setHeaderText("Elige tu pista (solo puedes usar 1 por partida)");
-        dialogo.setContentText("Opción:");
+        dialogo.setHeaderText(enIngles ? "Choose your hint (only 1 per game)" : 
+                "Elige tu pista (solo puedes usar 1 por partida)");
+        dialogo.setContentText(enIngles ? "Option:" : "Opción:");
 
         dialogo.showAndWait().ifPresent(seleccion -> {
             int opcion = Integer.parseInt(seleccion.substring(0, 1));
             String resultado = juego.pedirPista(opcion);
 
             if (resultado.equals("requiere intento")) {
-                mostrarAlerta("Pista no disponible", "Ingresa al menos una palabra para establecer los límites iniciales.",
+                mostrarAlerta(enIngles ? "Hint unavailable" : "Pista no disponible",
+                        enIngles ? "Enter at least one word to establish the initial limits." : 
+                                "Ingresa al menos una palabra para establecer los límites iniciales.",
                         Alert.AlertType.WARNING);
             } else if (resultado.equals("demasiado cerca")) {
-                mostrarAlerta("Pista no disponible", "No puedes usar ya esta pista, estás muy cerca.",
+                mostrarAlerta(enIngles ? "Hint unavailable" : "Pista no disponible",
+                        enIngles ? "You cannot use this hint anymore, you are too close." : 
+                                "No puedes usar ya esta pista, estás muy cerca.",
                         Alert.AlertType.WARNING);
             } else {
-                mostrarAlerta("Pista", resultado, Alert.AlertType.INFORMATION);
+                mostrarAlerta(enIngles ? "Hint" : "Pista", resultado, Alert.AlertType.INFORMATION);
                 actualizarInterfaz();
             }
         });
@@ -709,8 +719,13 @@ public class BetweenleGUI extends Application {
 
     private void mostrarFinJuego(boolean victoria) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-        alerta.setHeaderText(victoria ? "ADIVINASTE LA PALABRA" : "TE QUEDASTE SIN INTENTOS");
-        alerta.setContentText("LA PALABRA ERA: " + juego.getRondaActual().getPalabraSecreta().toUpperCase());
+
+        String tituloWin = enIngles ? "YOU GUESSED THE WORD" : "ADIVINASTE LA PALABRA";
+        String tituloLose = enIngles ? "YOU DIDN'T GUESS THE WORD" : "TE QUEDASTE SIN INTENTOS";
+
+        alerta.setHeaderText(victoria ? tituloWin : tituloLose);
+        alerta.setContentText((enIngles ? "THE WORD WAS " : "LA PALABRA ERA ") +
+                juego.getRondaActual().getPalabraSecreta().toUpperCase());
 
         alerta.showAndWait();
     }
