@@ -255,8 +255,8 @@ public class BetweenleGUI extends Application {
 
             if (iniciado) {
                 Stage stageActual = (Stage) contenedorPrincipal.getScene().getWindow();
-                stageActual.setWidth(850);
-                stageActual.setHeight(700);
+                stageActual.setWidth(800);
+                stageActual.setHeight(650);
                 stageActual.centerOnScreen();
 
                 mostrarInterfazJuego();
@@ -286,11 +286,26 @@ public class BetweenleGUI extends Application {
         contenedorPrincipal.setTop(contenedorSuperior);
 
         intentosRestantes = new Label("INTENTO 0 / " + juego.getRondaActual().getIntentosRestantes());
-        intentosRestantes.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+        intentosRestantes.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-        HBox contenedorIntentos = new HBox(intentosRestantes);
-        contenedorIntentos.setAlignment(Pos.CENTER);
+        ImageButton menu = new ImageButton("src/main/java/uabc/david/practica6poo2026/casa_menu.png", 50, 50);
+        menu.setFocusTraversable(false);
+        menu.setOnAction(e -> mostrarMenuPrincipal());
 
+        ImageButton pistas = new ImageButton("src/main/java/uabc/david/practica6poo2026/idea_pista.png", 50, 50);
+        pistas.setFocusTraversable(false);
+        pistas.setOnAction(e -> manejarPista());
+
+        BorderPane barraEstado = new BorderPane();
+        barraEstado.setLeft(menu);
+        barraEstado.setCenter(intentosRestantes);
+        barraEstado.setRight(pistas);
+
+        barraEstado.setPadding(new Insets(10, 160, 20, 160));
+
+        BorderPane.setAlignment(menu, Pos.CENTER_LEFT);
+        BorderPane.setAlignment(intentosRestantes, Pos.CENTER);
+        BorderPane.setAlignment(pistas, Pos.CENTER_RIGHT);
 
         contenedorSuperior = new HBox(5);
         contenedorSuperior.setAlignment(Pos.CENTER);
@@ -336,27 +351,12 @@ public class BetweenleGUI extends Application {
         panelTeclado.setMaxWidth(550);
         crearAbecedario();
 
-        pistas = new Button("PEDIR PISTA");
-        pistas.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #FFB300; " +
-                "-fx-text-fill: white; -fx-background-radius: 5;");
-        pistas.setFocusTraversable(false);
-        pistas.setOnAction(e -> {
-            manejarPista();
-        });
-
-        menu = new Button("MENU");
-        menu.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #545454; " +
-                "-fx-text-fill: white; -fx-background-radius: 5;");
-        menu.setOnAction(e -> {
-            mostrarMenuPrincipal();
-        });
-
-        VBox componentesInferiores = new VBox(15, panelTeclado, contenedorHistorialAbajo, pistas, menu);
+        VBox componentesInferiores = new VBox(15, panelTeclado, contenedorHistorialAbajo);
         componentesInferiores.setAlignment(Pos.CENTER);
-        componentesInferiores.setPadding(new Insets(0, 0, 20, 0));
+        componentesInferiores.setPadding(new Insets(0, 0, 70, 0));
 
         BorderPane interfazCompleta = new BorderPane();
-        interfazCompleta.setTop(contenedorIntentos);
+        interfazCompleta.setTop(barraEstado);
         interfazCompleta.setCenter(componentesCentrales);
         interfazCompleta.setBottom(componentesInferiores);
         interfazCompleta.setRight(null);
@@ -372,8 +372,8 @@ public class BetweenleGUI extends Application {
         mostrarCursor();
 
         if (stagePrincipal != null) {
-            stagePrincipal.setWidth(850);
-            stagePrincipal.setHeight(700);
+            stagePrincipal.setWidth(800);
+            stagePrincipal.setHeight(650);
             stagePrincipal.centerOnScreen();
         }
     }
