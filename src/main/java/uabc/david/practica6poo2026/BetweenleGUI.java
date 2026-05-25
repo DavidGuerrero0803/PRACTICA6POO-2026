@@ -14,6 +14,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+/**
+ * Esta clase provee la interfaz de usuario gráfica (GUI) para el Betweenle.
+ * Muestra menús, lee entradas y presenta los resultados.
+ */
 public class BetweenleGUI extends Application {
     private BorderPane contenedorPrincipal;
     private Betweenle juego;
@@ -78,7 +82,7 @@ public class BetweenleGUI extends Application {
                 "#42adf5", "#2a8cd8", "#ffffff");
         jugar.setPrefWidth(400);
         jugar.setPrefHeight(50);
-        jugar.setOnAction(event -> {
+        jugar.setOnAction(e-> {
             mostrarConfiguracion();
         });
 
@@ -416,6 +420,24 @@ public class BetweenleGUI extends Application {
         }
     }
 
+    /**
+     * Recorre todos los botones del teclado virtual y los restaura a su estado inicial.
+     */
+    private void reiniciarTeclado() {
+        if (panelTeclado != null) {
+            for (Node nodo : panelTeclado.getChildren()) {
+                if (nodo instanceof Button) {
+                    Button botonLetra = (Button) nodo;
+                    // Reactiva el botón en caso de que esté deshabilitado.
+                    botonLetra.setDisable(false);
+                    // Restaura el estilo original.
+                    botonLetra.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 50em; -fx-font-weight: bold;" +
+                            "-fx-font-size: 18px; -fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px;");
+                }
+            }
+        }
+    }
+
     private void actualizarAlfabeto() {
         if (juegoBloqueado) {
             return;
@@ -719,7 +741,7 @@ public class BetweenleGUI extends Application {
 
     private void mostrarFinJuego(boolean victoria) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-
+        reiniciarTeclado();
         String tituloWin = enIngles ? "YOU GUESSED THE WORD" : "ADIVINASTE LA PALABRA";
         String tituloLose = enIngles ? "YOU DIDN'T GUESS THE WORD" : "TE QUEDASTE SIN INTENTOS";
 
