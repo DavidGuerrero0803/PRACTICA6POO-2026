@@ -73,7 +73,9 @@ public class BetweenleGUI extends Application {
         contenedorSuperior.setAlignment(Pos.CENTER);
         contenedorPrincipal.setTop(contenedorSuperior);
 
-        SoundButton jugar = new SoundButton("JUGAR");
+        SoundButton jugar = new SoundButton("JUGAR",
+                "src/main/java/uabc/david/practica6poo2026/Menu_Open.wav",
+                "#42adf5", "#2a8cd8", "#ffffff");
         jugar.setPrefWidth(400);
         jugar.setPrefHeight(50);
         jugar.setOnAction(event -> {
