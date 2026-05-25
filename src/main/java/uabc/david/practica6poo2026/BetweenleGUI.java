@@ -3,6 +3,7 @@ package uabc.david.practica6poo2026;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Node;
 import javafx.geometry.Pos;
@@ -20,7 +21,9 @@ public class BetweenleGUI extends Application {
     private ListView<String> historialPalabras;
     private FlowPane panelTeclado;
     private Button pistas;
+    private Button menu;
     private Label[] casillasEntrada;
+    private Label titulo;
     private int letraIngresada = 0;
     private HBox contenedorSuperior;
     private HBox contenedorIntermedio;
@@ -32,7 +35,7 @@ public class BetweenleGUI extends Application {
     public void start(Stage stage) {
         contenedorPrincipal = new BorderPane();
 
-        Label titulo = new Label("BETWEENLE");
+        titulo = new Label("BETWEENLE");
         Label subtitulo = new Label("Adivina la palabra secreta escondida entre otras palabras");
         titulo.setStyle("-fx-font-weight: bold; -fx-font-size: 50px;");
         subtitulo.setStyle("-fx-font-weight: bold; -fx-font-size: 15px;");
@@ -46,7 +49,7 @@ public class BetweenleGUI extends Application {
 
         mostrarMenuPrincipal();
 
-        Scene scene = new Scene(contenedorPrincipal, 550, 650);
+        Scene scene = new Scene(contenedorPrincipal, 550, 700);
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
@@ -201,16 +204,13 @@ public class BetweenleGUI extends Application {
                     longitudLetras = spinnerLetras.getValue();
                 }
             }
-
-            System.out.println("idioma: " + idiomaElegido + ", dificultad: " + dificultadElegida + " (" + longitudLetras + " letras), intentos: " + intentosElegidos);
-
             juego = new Betweenle(longitudLetras);
             boolean iniciado = juego.iniciarPartida(idiomaElegido, dificultadElegida, intentosElegidos);
 
             if (iniciado) {
                 Stage stageActual = (Stage) contenedorPrincipal.getScene().getWindow();
                 stageActual.setWidth(850);
-                stageActual.setHeight(850);
+                stageActual.setHeight(700);
                 stageActual.centerOnScreen();
 
                 mostrarInterfazJuego();
@@ -218,7 +218,6 @@ public class BetweenleGUI extends Application {
                 mostrarAlerta("Error", "No se encontraron palabras de " + longitudLetras +
                         " letras en el diccionario", Alert.AlertType.ERROR);
             }
-
         });
 
         contenedorPrincipal.setCenter(contenedorCompleto);
@@ -229,12 +228,23 @@ public class BetweenleGUI extends Application {
         juegoBloqueado = false;
         letraIngresada = 0;
 
+        titulo.setText("BETWEENLE");
+        titulo.setStyle("-fx-font-weight: bold; -fx-font-size: 50px;");
+
+        VBox contenedorTitulo = new VBox(titulo);
+        contenedorTitulo.setAlignment(Pos.TOP_CENTER);
+        contenedorTitulo.setPadding(new Insets(10, 0, 10, 0));
+
+        contenedorSuperior = new HBox(contenedorTitulo);
+        contenedorSuperior.setAlignment(Pos.CENTER);
+        contenedorPrincipal.setTop(contenedorSuperior);
+
         intentosRestantes = new Label("Intentos: 0/" + juego.getRondaActual().getIntentosRestantes());
         intentosRestantes.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
-        HBox contenedorIntentos = new HBox(50, intentosRestantes);
+        HBox contenedorIntentos = new HBox(intentosRestantes);
         contenedorIntentos.setAlignment(Pos.CENTER);
-        contenedorIntentos.setPadding(new Insets(15, 0, 15, 0));
+
 
         contenedorSuperior = new HBox(5);
         contenedorSuperior.setAlignment(Pos.CENTER);
@@ -251,7 +261,7 @@ public class BetweenleGUI extends Application {
             Label casilla = new Label("");
             casilla.setStyle("-fx-border-color: #5c5c5c; -fx-border-width: 2; -fx-background-color: white; " +
                     "-fx-font-size: 22px; -fx-font-weight: bold; -fx-alignment: center; -fx-min-width: 40px; " +
-                    "-fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-background-radius: 3;");
+                    "-fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px;");
             casillasEntrada[i] = casilla;
             contenedorIntermedio.getChildren().add(casilla);
         }
@@ -259,18 +269,18 @@ public class BetweenleGUI extends Application {
         contenedorInferior = new HBox(5);
         contenedorInferior.setAlignment(Pos.CENTER);
 
-        VBox componentesCentrales = new VBox(12, contenedorSuperior, contenedorIntermedio, contenedorInferior);
+        VBox componentesCentrales = new VBox(8, contenedorSuperior, contenedorIntermedio, contenedorInferior);
         componentesCentrales.setAlignment(Pos.CENTER);
-        componentesCentrales.setPadding(new Insets(20, 0, 20, 0));
 
         Label tituloHistorial = new Label("PALABRAS UTILIZADAS");
         tituloHistorial.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #555555;");
+        tituloHistorial.setPadding(new Insets(20, 0, 0, 0));
 
         historialPalabras = new ListView<>();
-        historialPalabras.setPrefHeight(80);
+        historialPalabras.setPrefHeight(60);
         historialPalabras.setMaxWidth(600);
         historialPalabras.setFocusTraversable(false);
-        historialPalabras.setOrientation(javafx.geometry.Orientation.HORIZONTAL);
+        historialPalabras.setOrientation(Orientation.HORIZONTAL);
 
         VBox contenedorHistorialAbajo = new VBox(5, tituloHistorial, historialPalabras);
         contenedorHistorialAbajo.setAlignment(Pos.CENTER);
@@ -281,15 +291,23 @@ public class BetweenleGUI extends Application {
         crearAbecedario();
 
         pistas = new Button("PEDIR PISTA");
-        pistas.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #FFB300; -fx-text-fill: white; -fx-background-radius: 5;");
+        pistas.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #FFB300; " +
+                "-fx-text-fill: white; -fx-background-radius: 5;");
         pistas.setFocusTraversable(false);
         pistas.setOnAction(e -> {
             manejarPista();
         });
 
-        VBox componentesInferiores = new VBox(15, panelTeclado, contenedorHistorialAbajo, pistas);
+        menu = new Button("MENU");
+        menu.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #545454; " +
+                "-fx-text-fill: white; -fx-background-radius: 5;");
+        menu.setOnAction(e -> {
+            mostrarMenuPrincipal();
+        });
+
+        VBox componentesInferiores = new VBox(15, panelTeclado, contenedorHistorialAbajo, pistas, menu);
         componentesInferiores.setAlignment(Pos.CENTER);
-        componentesInferiores.setPadding(new Insets(10, 0, 20, 0));
+        componentesInferiores.setPadding(new Insets(0, 0, 20, 0));
 
         BorderPane interfazCompleta = new BorderPane();
         interfazCompleta.setTop(contenedorIntentos);
@@ -559,15 +577,14 @@ public class BetweenleGUI extends Application {
         contenedorLimites.getChildren().clear();
 
         Label etiquetaAprox = new Label(proximidad);
-        etiquetaAprox.setStyle("-fx-background-color: #03a9f4; -fx-background-radius: 8; -fx-font-weight: bold; -fx-text-fill: white; " +
+        etiquetaAprox.setStyle("-fx-background-color: #03a9f4; -fx-font-weight: bold; -fx-text-fill: white; " +
                 "-fx-alignment: center; -fx-min-width: 35px; -fx-min-height: 25px; -fx-font-size: 12px;");
         contenedorLimites.getChildren().add(etiquetaAprox);
 
         for (char c : palabra.toUpperCase().toCharArray()) {
             Label casilla = new Label(String.valueOf(c));
             casilla.setStyle("-fx-background-color: " + colorHex + "; -fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold; " +
-                    "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; " +
-                    "-fx-background-radius: 3;");
+                    "-fx-alignment: center; -fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; ");
             contenedorLimites.getChildren().add(casilla);
         }
     }

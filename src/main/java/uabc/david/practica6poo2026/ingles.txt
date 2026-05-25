@@ -5196,11 +5196,6 @@ married
 marriott
 mars
 marsh
-marshall
-mart
-martha
-martial
-martin
 marvel
 mary
 maryland
@@ -5296,7 +5291,6 @@ meetup
 mega
 mel
 melbourne
-melissa
 melts
 mem
 member
