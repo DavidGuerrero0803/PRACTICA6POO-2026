@@ -4575,7 +4575,6 @@ heroe
 heroína
 herramienta
 herramientas
-hey
 hice
 hiciera
 hicieran
@@ -5679,7 +5678,6 @@ mates
 mato
 matones
 matrimonio
-matrix
 matriz
 matrícula
 maté
@@ -5833,7 +5831,6 @@ millas
 millonario
 millones
 millón
-milord
 mina
 minas
 mini
@@ -6739,8 +6736,6 @@ pecado
 pecadores
 pecados
 peces
-pecho
-pechos
 pedazo
 pedazos
 pediatría
@@ -6754,7 +6749,6 @@ pedirte
 pediré
 pediría
 pediste
-pedo
 pedí
 pedía
 pega
@@ -6797,7 +6791,6 @@ película
 películas
 pena
 penas
-pendejo
 pendiente
 pendientes
 pensaba
@@ -7009,8 +7002,6 @@ pista
 pistas
 pistola
 pistolas
-pita
-pito
 pizza
 pizzas
 piénsalo
@@ -7137,15 +7128,12 @@ ponte
 ponía
 pop
 popa
-pope
 popular
 poquito
 por
 porcentaje
 porche
 porfavor
-porno
-pornografía
 porque
 porquería
 porquerías
@@ -8356,7 +8344,6 @@ sencilla
 sencillamente
 sencillo
 sendero
-senos
 sensacional
 sensación
 sensibilidad
@@ -8976,13 +8963,11 @@ terrorista
 terroristas
 tesoro
 tesoros
-test
 testamento
 testificar
 testigo
 testigos
 testimonio
-tetas
 texto
 ti
 tia
@@ -9592,8 +9577,6 @@ violentos
 violeta
 violín
 vip
-virgen
-virginidad
 virtud
 virus
 visa
